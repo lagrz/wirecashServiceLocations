@@ -10,6 +10,14 @@ module.exports = function (config) {
     connect().use(connect.static('config')).listen(9877);
 
     config.set({
+
+        plugins:[
+            'karma-jquery',
+            'karma-qunit',
+            'karma-phantomjs-launcher',
+            'karma-jshint-preprocessor'
+        ],
+
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 

@@ -19,6 +19,7 @@
     "karma": "^0.12.0",
     "karma-qunit": "^0.1.1",
     "karma-jshint-preprocessor": "0.0.2",
-    "karma-jquery": "^0.1.0"
+    "karma-jquery": "^0.1.0",
+    "connect": "^2.14.2"
   }
 }
