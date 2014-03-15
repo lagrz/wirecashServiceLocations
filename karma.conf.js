@@ -7,7 +7,7 @@ module.exports = function (config) {
     'use strict';
 
     var connect = require('connect');
-    connect().use(connect.static('config')).listen(9877);
+    connect().use(connect.static('config')).listen(19877);
 
     config.set({
 
@@ -41,7 +41,7 @@ module.exports = function (config) {
         },
 
         proxies: {
-            '/config/': 'http://localhost:9877/'
+            '/config/': 'http://localhost:19877/'
         },
 
         // test results reporter to use
@@ -50,7 +50,7 @@ module.exports = function (config) {
         reporters: ['progress'],
 
         // web server port
-        port: 9876,
+        port: 19876,
 
         // enable / disable colors in the output (reporters and logs)
         colors: true,
