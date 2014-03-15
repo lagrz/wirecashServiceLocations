@@ -1,0 +1,30 @@
+{
+  "name": "service-locations",
+  "version": "0.0.0",
+  "description": "service locations gmaps v3",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node node_modules/karma/bin/karma start --single-run --browsers PhantomJS"
+  },
+  "keywords": [
+    "google",
+    "maps"
+  ],
+  "author": "roarbort@gmail.com",
+  "license": "None",
+  "devDependencies": {
+    "karma": "~0.12.0",
+    "qunitjs": "~1.12.0",
+    "karma-qunit": "~0.1.1",
+    "karma-phantomjs-launcher": "~0.1.2",
+    "jshint": "~2.4.4",
+    "karma-jshint-preprocessor": "0.0.2",
+    "karma-jquery": "~0.1.0"
+  },
+  "dependencies": {
+    "connect": "~2.14.2"
+  }
+}
