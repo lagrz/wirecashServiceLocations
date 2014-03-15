@@ -1,30 +1,20 @@
 {
-  "name": "service-locations",
-  "version": "0.0.0",
-  "description": "service locations gmaps v3",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
+  "name": "jquery-plugin",
+  "version": "0.0.0-ignored",
+  "engines": {
+    "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "node node_modules/karma/bin/karma start --single-run --browsers PhantomJS"
+    "test": "grunt test"
   },
-  "keywords": [
-    "google",
-    "maps"
-  ],
-  "author": "roarbort@gmail.com",
-  "license": "None",
   "devDependencies": {
-    "karma": "~0.12.0",
-    "qunitjs": "~1.12.0",
-    "karma-qunit": "~0.1.1",
-    "karma-phantomjs-launcher": "~0.1.2",
-    "jshint": "~2.4.4",
-    "karma-jshint-preprocessor": "0.0.2",
-    "karma-jquery": "~0.1.0"
-  },
-  "dependencies": {
-    "connect": "~2.14.2"
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-qunit": "~0.2.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-watch": "~0.4.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt": "~0.4.4",
+    "grunt-contrib-connect": "^0.7.1"
   }
 }

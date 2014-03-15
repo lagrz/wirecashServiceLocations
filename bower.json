@@ -1,29 +1,23 @@
 {
-  "name": "service-locations",
-  "version": "0.0.0",
-  "authors": [
-    "roarbort@gmail.com"
-  ],
-  "description": "google maps thingie",
-  "main": "index.js",
-  "keywords": [
-    "google",
-    "maps"
-  ],
-  "license": "none",
-  "homepage": "blah",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "jquery": "~2.1.0",
-    "qunit": "~1.14.0",
-    "sinon": "~1.9.0",
-      "sinon-qunit":"~1.0.0"
-  }
+    "name": "service-locations",
+    "version": "0.0.0",
+    "authors": [
+        "roarbort@gmail.com"
+    ],
+    "description": "google maps thingie",
+    "main": "index.js",
+    "keywords": [
+        "google", "maps"
+    ],
+    "license": "none",
+    "homepage": "blah",
+    "private": true,
+    "ignore": [
+        "**/.*", "node_modules", "bower_components", "test", "tests"
+    ],
+    "dependencies": {
+        "jquery": "~2.1.0",
+        "sinon": "~1.9.0",
+        "sinon-qunit": "~1.0.0"
+    }
 }
