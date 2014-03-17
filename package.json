@@ -5,7 +5,7 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS"
+    "test": "grunt"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.0",
@@ -15,12 +15,12 @@
     "grunt-contrib-watch": "~0.4.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt": "~0.4.4",
-    "grunt-contrib-connect": "^0.7.1",
-    "karma": "^0.12.0",
-    "karma-qunit": "^0.1.1",
+    "grunt-contrib-connect": "~0.7.1",
+    "karma": "*",
+    "karma-qunit": "*",
     "karma-jshint-preprocessor": "0.0.2",
-    "karma-jquery": "^0.1.0",
-    "connect": "^2.14.2",
-    "karma-phantomjs-launcher": "^0.1.2"
+    "karma-jquery": "*",
+    "connect": "~2.14.2",
+    "karma-phantomjs-launcher": "~0.1.2"
   }
 }

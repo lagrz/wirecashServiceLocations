@@ -1,7 +1,6 @@
 'use strict';
 module.exports = function (grunt) {
 
-
     grunt.initConfig({
         qunit: {
             all: {
@@ -15,7 +14,7 @@ module.exports = function (grunt) {
         connect: {
             server: {
                 options: {
-                    port: 8000,
+                    hostname:"*",
                     base: '.'
                 }
             }
@@ -34,6 +33,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-connect');
 
-    grunt.registerTask('test', ['connect', 'qunit']);
+    grunt.registerTask('default', ['jshint','connect', 'qunit']);
 
 };
