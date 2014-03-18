@@ -51,3 +51,18 @@ asyncTest('Loads google maps api dynamically with callback', function () {
 
     });
 });
+
+module('Test the tiny template engine');
+
+test('Render the template using a simple object', function () {
+    expect(1);
+
+    var tpl = 'hello {name} i am a {job}';
+    var obj = {
+        'name': 'john candy',
+        'job': 'developer'
+    };
+
+    var output = $.template(tpl, obj);
+    equal(output, 'hello john candy i am a developer', 'should match');
+});
