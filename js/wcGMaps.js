@@ -1,5 +1,5 @@
 /* jshint camelcase:false*/
-(function (window, $, google) {
+(function (window, $) {
     'use strict';
 
     /**
@@ -64,6 +64,13 @@
                 callback(false);
             }
         });
+    };
+
+    GMaps.fn.setLatLng = function (serviceLocation) {
+        if (serviceLocation.get('lat') !== 0) {
+            var latlnt = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
+            serviceLocation.set('gmapLatLng', latlnt);
+        }
     };
 
     /**
@@ -139,4 +146,4 @@
     };
 
     $.WCGmaps = GMaps;
-})(this, this.jQuery, this.google);
+})(this, this.jQuery);

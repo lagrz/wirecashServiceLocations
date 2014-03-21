@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locations sample</title>
+    <style>
+        .block-group, .block, .block-group:after, .block:after, .block-group:before, .block:before {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .block-group {
+            *zoom: 1;
+        }
+
+        .block-group:before, .block-group:after {
+            display: table;
+            content: "";
+            line-height: 0;
+        }
+
+        .block-group:after {
+            clear: both;
+        }
+
+        .block-group {
+            /* ul/li compatibility */
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .block-group > .block-group {
+            clear: none;
+            float: left;
+            margin: 0 !important;
+        }
+
+        .block {
+            float: left;
+            width: 100%;
+        }
+
+        .paging, .map {
+            width: 50%
+        }
+
+        .map {
+            height: 500px;
+        }
+
+        #the-container {
+            width: 970px;
+            margin: 0 auto;
+            border: 1px solid black;
+        }
+
+        ul{
+            list-style-type: none;
+        }
+        ul li{
+            float: left;
+            width: 25%;
+            text-align: center;
+        }
+        .no-data, .loading{
+            text-align: center;
+        }
+        .header{
+            padding: 10px;
+            font-size: 20px;
+            text-align: center;
+            background: #AEBDCC;
+            border-bottom: 5px solid #0d3349;
+        }
+        .wc-disable a{
+            color: #ccc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="the-container"></div>
+
+<div style="display: none;">
+    <textarea id="tpl-main">
+        <div class="block-group"> <!-- First row -->
+            <div class="header block">Sample Service Locations Locations</div>
+            <div class="paging block">
+                <ul class="block-group">
+                    <li class="wc-first-page"><a href="javascript://">first page</a></li>
+                    <li class="wc-page-back"><a href="javascript://">back</a></li>
+                    <li class="wc-page-next"><a href="javascript://">next</a></li>
+                    <li class="wc-last-page"><a href="javascript://">last page</a></li>
+                </ul>
+                <div class="content block wc-content-container"></div>
+            </div>
+            <div class="map block wc-map-container"></div>
+
+        </div>
+    </textarea>
+    <textarea id="tpl-location">
+        <div style="padding: 15px;border-bottom: 1px solid #ccc;">
+            <div>address: {address}</div>
+            <div>country: {country}</div>
+            <div>distance: {distance}</div>
+            <div>hours: {hours}</div>
+            <div>name: {name}</div>
+            <div>phone: {phone}</div>
+        </div>
+    </textarea>
+    <textarea id="tpl-noData">
+        <div class="no-data">No data was found please try again</div>
+    </textarea>
+    <textarea id="tpl-loading">
+        <div class="loading">Loading data .. please wait</div>
+    </textarea>
+</div>
+
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="wcGMaps.js"></script>
+<script src="wcGMapsAPILoader.js"></script>
+<script src="wcPaginator.js"></script>
+<script src="wcServiceLocation.js"></script>
+<script src="wcTemplate.js"></script>
+<script src="wcServiceLocationsGmap.js"></script>
+<script>
+    jQuery(function ($) {
+        $.getJSON('../config/maps_api.json')
+                .done(function (data) {
+                    new $.WCServiceLocationsView({
+                        container: $('#the-container'),
+                        tplMain: $('#tpl-main').val(),
+                        tplLocation: $('#tpl-location').val(),
+                        tplNoData: $('#tpl-noData').val(),
+                        tplLoading: $('#tpl-loading').val(),
+                        pagerRecordsUrl: 'sample.json',
+                        pagerTotalRecords: 10,
+                        mapsAPIKey: data.key
+                    });
+                })
+                .fail(function () {
+                    $('#the-container').html("<h1>Make sure you have a ../config/maps_api.json File</h1>");
+                });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{
+    "result": true,
+    "data": [
+        {
+            "address": "Av Vallarta 47745, Camichines Vallarta, Jardines Vallarta, Guadalajara, Jalisco",
+            "agentCode": "q234dasd3423",
+            "lat": "18.74776748",
+            "lng": "-98.34946247",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "Av Vallarta 47745, Camichines Vallarta, Jardines Vallarta, Guadalajara, Jalisco",
+            "agentCode": "q234dasd3423",
+            "lat": "19.23731165",
+            "lng": "-98.82496459",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "Av Vallarta 47745, Camichines Vallarta, Jardines Vallarta, Guadalajara, Jalisco",
+            "agentCode": "q234dasd3423",
+            "lat": "19.05079436",
+            "lng": "-98.45826567",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "Av Vallarta 47745, Camichines Vallarta, Jardines Vallarta, Guadalajara, Jalisco",
+            "agentCode": "q234dasd3423",
+            "lat": "19.97889142",
+            "lng": "-98.18240772",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "Av Vallarta 47745, Camichines Vallarta, Jardines Vallarta, Guadalajara, Jalisco",
+            "agentCode": "q234dasd3423",
+            "lat": "20.5050083",
+            "lng": "-99.231271",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        }
+    ]
+}

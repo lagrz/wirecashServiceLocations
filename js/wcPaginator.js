@@ -17,6 +17,7 @@
             onAjaxError: $.noop,
             onAjaxComplete: $.noop,
             onAjaxSuccess: $.noop,
+            onBeforePage: $.noop,
             onPage: $.noop,
             data: []
         }, opts || {});
@@ -63,6 +64,10 @@
     fn.getData = function (pageNo) {
         var self = this;
         this.recs.params = $.extend(this.recs.params, this.calculateRange(pageNo));
+
+        if(this.recs.data[this.recs.currPage]){
+            this.recs.onBeforePage(this.recs.data[this.recs.currPage]);
+        }
 
         //page already exists in the cache use it
         if (this.recs.data[pageNo]) {
