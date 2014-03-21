@@ -1,6 +1,10 @@
 (function (win, $) {
     'use strict';
 
+    /**
+     * Paginator class
+     * @type {WCPaginator}
+     */
     var Pager = $.WCPaginator = function (opts) {
         //extend default settings
         this.recs = $.extend({}, {
@@ -35,20 +39,37 @@
 
     var fn = Pager.fn = Pager.prototype;
 
+    /**
+     * Returns the current page
+     * @returns {number|$.WCPaginator.recs.currPage}
+     */
     fn.getCurrentPage = function(){
         return this.recs.currPage;
     };
 
+    /**
+     * Returns an array containing the data for the current page
+     * @returns {*}
+     */
     fn.getCurrentPageData = function(){
         return this.recs.data[this.recs.currPage];
     };
 
+    /**
+     * Calculates the total number of pages
+     * @returns {number|$.WCPaginator.recs.totalPages}
+     */
     fn.totalPages = function () {
         //calculate the total amount of pages
         this.recs.totalPages = Math.ceil(this.recs.total / this.recs.show);
         return this.recs.totalPages;
     };
 
+    /**
+     * Calculates the range for the page number (start, end)
+     * @param pageNo
+     * @returns {{start: number, end: number}}
+     */
     fn.calculateRange = function (pageNo) {
         //get start record number
         var s = (pageNo * this.recs.show);
@@ -69,12 +90,20 @@
         };
     };
 
+    /**
+     * Performs a callback before calling on page callback
+     */
     fn.beforePaging = function(){
         if(this.recs.data[this.recs.currPage]){
             this.recs.onBeforePage(this.recs.data[this.recs.currPage]);
         }
     };
 
+    /**
+     * Grabs data from server via ajax call or from local cache
+     * @param pageNo
+     * @returns {Pager.fn}
+     */
     fn.getData = function (pageNo) {
         var self = this;
         this.recs.params = $.extend(this.recs.params, this.calculateRange(pageNo));
@@ -110,6 +139,11 @@
         return this;
     };
 
+    /**
+     * Function called after ajax call is complete and
+     * any data sanitation was performed from the 'onAjaxSuccess' callback
+     * @param json
+     */
     fn.ajaxSuccess = function (json) {
         var pageNo = this.recs.currPage;
 
@@ -133,6 +167,11 @@
         this.recs.onPage(this.recs.data[pageNo], this);
     };
 
+    /**
+     * Returns an object with key and either true or false
+     * for each pagination control
+     * @returns {{first: *, prev: *, next: *, last: *}}
+     */
     fn.pageControls = function () {
         var page = this.recs.currPage;
         var first, prev, next, last;
@@ -155,13 +194,20 @@
         };
     };
 
+    /**
+     * Moves to the next page
+     * @returns {Pager.fn}
+     */
     fn.next = function () {
         this.beforePaging();
         this.recs.currPage++;
         this.getData(this.recs.currPage);
         return this;
     };
-
+    /**
+     * Moves to the previous page
+     * @returns {Pager.fn}
+     */
     fn.back = function () {
         this.beforePaging();
         this.recs.currPage--;
@@ -169,6 +215,10 @@
         return this;
     };
 
+    /**
+     * Moves to the first page
+     * @returns {Pager.fn}
+     */
     fn.first = function () {
         this.beforePaging();
         this.recs.currPage = 0;
@@ -176,12 +226,30 @@
         return this;
     };
 
+    /**
+     * Moves to the last page
+     * @returns {Pager.fn}
+     */
     fn.last = function () {
         this.beforePaging();
         this.recs.currPage = this.recs.totalPages - 1;
 
         //set page to last page
         this.getData(this.recs.currPage);
+        return this;
+    };
+
+    /**
+     * Moves to specified page if its in range
+     * @param pageNo
+     * @returns {Pager.fn}
+     */
+    fn.page = function(pageNo){
+        this.beforePaging();
+        if(pageNo < this.recs.totalPages && pageNo >= 0){
+            this.recs.currPage = pageNo;
+            this.getData(pageNo);
+        }
         return this;
     };
 

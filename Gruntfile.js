@@ -37,12 +37,12 @@ module.exports = function (grunt) {
             js: {
                 files: {
                     'build/<%=buildFile%>.js': [
-                        'js/wcGMapsAPILoader.js',
                         'js/wcTemplate.js',
-                        'js/wcServiceLocation.js',
+                        'js/wcGMapsAPILoader.js',
                         'js/wcGMaps.js',
                         'js/wcPaginator.js',
-                        'js/wcServiceLocationsGmap.js'
+                        'js/wcServiceLocation.js',
+                        'js/wcServiceLocationsView.js'
                     ]
                 }
             }
@@ -61,6 +61,7 @@ module.exports = function (grunt) {
             }
         }
     });
+
     [
         'grunt-contrib-qunit',
         'grunt-contrib-jshint',
@@ -73,5 +74,6 @@ module.exports = function (grunt) {
         });
 
     grunt.registerTask('build', ['concat', 'uglify']);
+
     grunt.registerTask('default', ['jshint', 'connect', 'qunit']);
 };

@@ -124,7 +124,8 @@ jQuery listenable events triggered on the container element:
     WCService:onData        Triggered when ajax call received data
     WCService:onLoading     Triggered when ajax call is loading
     WCService:onNoData      Triggered when ajax call returned no data
-    WCService:onFirstRun    Triggered when initial ajax call is complete (when it got the first page of data)
+    WCService:onFirstRun    Triggered when initial ajax call is complete
+                            (when it got the first page of data)
 
 ### Note:
 This class uses pagination, therefore requires that the backend server supports `POST` requests with these base parameters:

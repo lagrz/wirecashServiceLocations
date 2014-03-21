@@ -3,15 +3,25 @@
     'use strict';
 
     var WCGmapsAPILoader = {
-        defaultOptions: {
-            key: '',
-            sensor: false,
-            gmapsLoaded: $.noop
-        },
+        /**
+         * Dynamically loads the google maps api options:
+         * key: maps api key, sensor: use sensor, gmapsLoaded: callback when done loading
+         * @param options
+         */
         init: function (options) {
-            options = $.extend({}, this.defaultOptions, options || {});
+            options = $.extend({
+                key: '',
+                sensor: false,
+                gmapsLoaded: $.noop
+            }, options || {});
+
             this.loadGmaps(options);
         },
+        /**
+         * Creates a callback in the global scope removes it after
+         * @param options
+         * @returns {string}
+         */
         buildGlobalCallback: function (options) {
             var cb = 'gmap_' + Date.now();
             window[cb] = function () {
@@ -22,6 +32,12 @@
             };
             return cb;
         },
+        /**
+         * Creates the url string with api key
+         * @param cb
+         * @param options
+         * @returns {string}
+         */
         buildUrl: function (cb, options) {
             var base = 'https://maps.googleapis.com/maps/api/js?';
             if (options.key.length !== 0) {
@@ -34,6 +50,10 @@
             }
             throw new Error('Invalid set of options');
         },
+        /**
+         * Dynamically loads the google maps api js file
+         * @param options
+         */
         loadGmaps: function (options) {
             if (!google && options.key.length !== 0) {
                 var s = document.createElement('script');

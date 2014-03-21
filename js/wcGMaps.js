@@ -79,7 +79,10 @@
             }
         });
     };
-
+    /**
+     * Sets a Google LatLng object to ServiceLocation object
+     * @param serviceLocation
+     */
     GMaps.fn.setLatLng = function (serviceLocation) {
         if (serviceLocation.get('lat') !== 0) {
             var latlnt = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
@@ -103,6 +106,13 @@
         }
     };
 
+    /**
+     * Creates Hover mouse event for markers
+     * @param serviceLocation
+     * @param callbackOver
+     * @param callbackOut
+     * @param context
+     */
     GMaps.fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
         serviceLocation = this._ensureList(serviceLocation);
         for (var i = 0, s = serviceLocation.length; i < s; i++) {

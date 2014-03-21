@@ -2,6 +2,11 @@
 (function (window, $, google) {
     'use strict';
 
+    /**
+     * Basic Object with setter and getter representing base data for ServiceLocation
+     * @param data
+     * @constructor
+     */
     var WCServiceLocation = function (data) {
         this.data = $.extend({
             address: null,
@@ -21,6 +26,11 @@
         }, data || {});
     };
 
+    /**
+     * Gets specified data
+     * @param key
+     * @returns {*}
+     */
     WCServiceLocation.prototype.get = function (key) {
         if (this.data.hasOwnProperty(key)) {
             return this.data[key];
@@ -28,10 +38,19 @@
         return undefined;
     };
 
+    /**
+     * Sets specified data
+     * @param key
+     * @param val
+     */
     WCServiceLocation.prototype.set = function (key, val) {
         this.data[key] = val;
     };
 
+    /**
+     * Returns an object without excluded items
+     * @returns {*}
+     */
     WCServiceLocation.prototype.toJSON = function () {
         var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
         var clone = $.extend({}, this.data);

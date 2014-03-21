@@ -1,11 +1,11 @@
 {
-    "name": "service-locations",
-    "version": "0.0.0",
+    "name": "wirecash-service-locations",
+    "version": "0.0.1",
     "authors": [
         "roarbort@gmail.com"
     ],
-    "description": "google maps thingie",
-    "main": "index.js",
+    "description": "Service Locations Widget",
+    "main": "build/wcServiceLocations.js",
     "keywords": [
         "google", "maps"
     ],
@@ -16,8 +16,6 @@
         "**/.*", "node_modules", "bower_components", "test", "tests"
     ],
     "dependencies": {
-        "jquery": "~2.1.0",
-        "sinon": "~1.9.0",
-        "sinon-qunit": "~1.0.0"
+        "jquery": "~2.1.0"
     }
 }

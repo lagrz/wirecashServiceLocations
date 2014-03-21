@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locations sample</title>
+    <title>Ugiliest Sample Service Locations</title>
     <style>
         .block-group, .block, .block-group:after, .block:after, .block-group:before, .block:before {
             -webkit-box-sizing: border-box;
@@ -96,6 +96,7 @@
 </head>
 <body>
 <div style="margin: 20px;text-align: center">
+    <p>Note: It is ideal to run this sample page on a localhost web server enviroment to avoid potential ajax issues.</p>
     <div><a href="index.html?timeout=5">Delay 5 seconds between Ajax Calls</a></div>
     <div><a href="index.html?timeout=10">Delay 10 seconds between Ajax Calls</a></div>
     <div><a href="index.html?timeout=15">Delay 15 seconds between Ajax Calls</a></div>
@@ -103,8 +104,9 @@
 <div id="the-container"></div>
 
 <div style="display: none;">
+
     <textarea id="tpl-main">
-        <div class="block-group"> <!-- First row -->
+        <div class="block-group">
             <div class="header block">Ugiliest Sample Service Locations</div>
             <div class="paging block">
                 <ul class="block-group">
@@ -119,6 +121,7 @@
 
         </div>
     </textarea>
+
     <textarea id="tpl-location">
         <div class="record" data-agentCode="{agentCode}">
             <div>address: {address}</div>
@@ -127,23 +130,24 @@
             <div>hours: {hours}</div>
             <div>name: {name}</div>
             <div>phone: {phone}</div>
+            <button>Select this location</button>
         </div>
     </textarea>
+
     <textarea id="tpl-noData">
         <div class="no-data">No data was found please try again</div>
     </textarea>
+
     <textarea id="tpl-loading">
         <div class="loading">Loading data .. please wait</div>
     </textarea>
+
 </div>
 
 <script src="../bower_components/jquery/dist/jquery.js"></script>
-<script src="../js/wcGMaps.js"></script>
-<script src="../js/wcGMapsAPILoader.js"></script>
-<script src="../js/wcPaginator.js"></script>
-<script src="../js/wcServiceLocation.js"></script>
-<script src="../js/wcTemplate.js"></script>
-<script src="../js/wcServiceLocationsGmap.js"></script>
+
+<!-- Use the latest distribution version -->
+<script src="../build/wcServiceLocations.min.js"></script>
 <script>
     jQuery(function ($) {
 
@@ -174,20 +178,28 @@
         $.WCServiceLocationsView.fn._handleData = function () {
             var self = this;
             var args = Array.prototype.slice.call(arguments, 0);
-            var param = (function(name){
+            var param = (function (name) {
                 name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
                 var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
                         results = regex.exec(location.search);
                 return results == null ? 0 : Number(decodeURIComponent(results[1].replace(/\+/g, " "))) || 0;
             })('timeout');
 
-            if(param){
+            if (param) {
                 setTimeout(function () {
                     original.apply(self, args);
                 }, param * 1000);
-            }else{
+            } else {
                 original.apply(self, args);
             }
+        };
+
+        var createEventClickListener = function () {
+            $('#the-container').on('click', 'button', function (event) {
+                var target = $(event.target);
+                var agent = target.parents('[data-agentcode]').data('agentcode');
+                alert('You selected agent-code: ' + agent);
+            });
         };
 
         //gets the config api data for google maps
@@ -195,19 +207,24 @@
                 .done(function (data) {
 
                     //instantiates the object using the plugin Pattern
-                    $('#the-container').WCServiceLocationsView({
-                        tplMain: $('#tpl-main').val(),
-                        tplLocation: $('#tpl-location').val(),
-                        tplNoData: $('#tpl-noData').val(),
-                        tplLoading: $('#tpl-loading').val(),
-                        pagerRecordsUrl: 'sample.json',
-                        pagerTotalRecords: 15,
-                        mapsAPIKey: data.key
-                    });
+                    $('#the-container')
+                            .WCServiceLocationsView({
+                                tplMain: $('#tpl-main').val(),
+                                tplLocation: $('#tpl-location').val(),
+                                tplNoData: $('#tpl-noData').val(),
+                                tplLoading: $('#tpl-loading').val(),
+                                pagerRecordsUrl: 'sample.json',
+                                pagerTotalRecords: 15,
+                                mapsAPIKey: data.key
+                            })
+
+                        //example of how to add additional event listeners from created
+                        //templated items using deffered events
+                            .on('WCService:create', createEventClickListener);
 
                 })
 
-                //Handles case where no maps api config file is found
+            //Handles case where no maps api config file is found
                 .fail(function () {
                     $('#the-container').html("<h1 style='text-align: center'>Make sure you have a ../config/maps_api.json File</h1>");
                 });
