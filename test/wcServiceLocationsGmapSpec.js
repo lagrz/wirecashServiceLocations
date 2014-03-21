@@ -8,6 +8,7 @@ QUnit.config.reorder = false;
 
 var config = false;
 
+//-- MAPS LOADER
 module('Test the google maps api loader', {
     setup: function () {
         stop();
@@ -24,15 +25,15 @@ module('Test the google maps api loader', {
 
 test('Correctly builds global callback', function () {
     expect(1);
-    var cb = $.WCServiceListGmap.loader.buildGlobalCallback(config);
+    var cb = $.WCGmapsAPILoader.buildGlobalCallback(config);
     ok(window[cb], 'Global callback exist');
 });
 
 test('Correctly builds url for maps api', function () {
     expect(3);
 
-    var cb = $.WCServiceListGmap.loader.buildGlobalCallback(config);
-    var url = $.WCServiceListGmap.loader.buildUrl(cb, config);
+    var cb = $.WCGmapsAPILoader.buildGlobalCallback(config);
+    var url = $.WCGmapsAPILoader.buildUrl(cb, config);
 
     notEqual(url.indexOf('https://maps.googleapis.com/maps/api/js?'), -1, 'Contains base url');
     notEqual(url.indexOf('key=' + config.key), -1, 'Contains key');
@@ -49,7 +50,7 @@ asyncTest('Loads google maps api dynamically with callback', function () {
     $.get('../config/maps_api.json').done(function (data) {
 
         //load the gmap api
-        $.WCServiceListGmap.loader.init($.extend({}, data, {
+        $.WCGmapsAPILoader.init($.extend({}, data, {
             gmapsLoaded: function () {
                 ok(window.google, 'Google is now loaded');
                 start();
@@ -59,6 +60,8 @@ asyncTest('Loads google maps api dynamically with callback', function () {
     });
 });
 
+
+//-- TINY TEMPLATE SYSTEM
 module('Test the tiny template engine');
 
 test('Render the template using a simple object', function () {
@@ -74,6 +77,8 @@ test('Render the template using a simple object', function () {
     equal(output, 'hello john candy i am a developer', 'should match');
 });
 
+
+//-- PAGINATOR
 module('Test paginator engine', {
     setup: function () {
         this.requestObject = function (req) {
@@ -307,3 +312,23 @@ asyncTest('Goes backward correctly', function () {
 
     this.fakeServer.respond();
 });
+
+
+//-- SERVICES LOCATION
+module('Test services locations');
+
+test('Builds a basic UI');
+
+test('Handles paginator page clicking events');
+
+test('Disables first page and back btn if on first page');
+
+test('Disables back and last btn if on last page');
+
+test('Adds markers to map');
+
+test('Hides markers no longer in page');
+
+test('jQuery Plugin api');
+
+test('Ensure it removes all listeners upon deletion');

@@ -12,4 +12,5 @@
     }
 
     $.WCTemplate = template;
+
 })(this, this.jQuery);

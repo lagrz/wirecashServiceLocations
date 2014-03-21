@@ -5,8 +5,6 @@
         //extend default settings
         this.recs = $.extend({}, {
             show: 15,
-            start: 0,
-            end: 14,
             currPage: 0,
             totalPages: 0,
             total: 0,
