@@ -315,6 +315,7 @@ asyncTest('Goes backward correctly', function () {
 
 
 //-- SERVICES LOCATION
+/*
 module('Test services locations');
 
 test('Builds a basic UI');
@@ -332,3 +333,4 @@ test('Hides markers no longer in page');
 test('jQuery Plugin api');
 
 test('Ensure it removes all listeners upon deletion');
+*/
