@@ -42,12 +42,13 @@
             width: 100%;
         }
 
-        .paging, .map {
-            width: 50%
+        .paging {
+            width: 75%;
         }
 
         .map {
-            height: 500px;
+            width: 25%;
+            height: 200px;
         }
 
         #the-container {
@@ -56,25 +57,29 @@
             border: 1px solid black;
         }
 
-        ul{
+        ul {
             list-style-type: none;
         }
-        ul li{
+
+        ul li {
             float: left;
             width: 25%;
             text-align: center;
         }
-        .no-data, .loading{
+
+        .no-data, .loading {
             text-align: center;
         }
-        .header{
+
+        .header {
             padding: 10px;
             font-size: 20px;
             text-align: center;
             background: #AEBDCC;
             border-bottom: 5px solid #0d3349;
         }
-        .wc-disable a{
+
+        .wc-disable a {
             color: #ccc;
             text-decoration: none;
         }
@@ -137,12 +142,12 @@
                         tplNoData: $('#tpl-noData').val(),
                         tplLoading: $('#tpl-loading').val(),
                         pagerRecordsUrl: 'sample.json',
-                        pagerTotalRecords: 10,
+                        pagerTotalRecords: 15,
                         mapsAPIKey: data.key
                     });
                 })
                 .fail(function () {
-                    $('#the-container').html("<h1>Make sure you have a ../config/maps_api.json File</h1>");
+                    $('#the-container').html("<h1 style='text-align: center'>Make sure you have a ../config/maps_api.json File</h1>");
                 });
     });
 </script>

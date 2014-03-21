@@ -85,8 +85,12 @@
                 success: function () {
                     var args = Array.prototype.slice.call(arguments, 0);
                     //prepend our callback
-                    args.unshift(self.ajaxSuccessCallback);
-                    self.recs.onAjaxSuccess.apply(null, args);
+                    if(self.recs.onAjaxSuccess !== $.noop){
+                        args.unshift(self.ajaxSuccessCallback);
+                        self.recs.onAjaxSuccess.apply(null, args);
+                    }else{
+                        self.ajaxSuccessCallback(args[0]);
+                    }
                 }
             });
         } else {
