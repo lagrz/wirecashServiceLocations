@@ -1,4 +1,4 @@
-Wirecash Service Locations Class / jQuery Plugin
+Wirecash Service Locations Class
 ====================================
 [![Build Status](http://ci.lagrz.com/lagrz/atmc_service_locations/badge)](http://ci.lagrz.com/lagrz/atmc_service_locations/)
 
@@ -25,16 +25,38 @@ All of these forms of instantiation require that you provide an object as a para
 
     AVAILABLE OPTIONS:
     ------------------
-    container           The main container element must be a valid jQuery object, if using the
-                        jQuery plugin patter you can omit this
+    container           The main container element must be a valid jQuery object,
+                        if using the jQuery plugin pattern you can omit this
 
     tplMain             The main container template, can be either string or a valid
-                        html / jQuery element
+                        html / jQuery element.
+
+                        It MUST contain at least an element with the following:
+                            - Whatever class defined for option 'mapContainer', default: '.wc-map-container'
+                            - Whatever class defined for option 'contentContainer', default: '.wc-content-container'
+
+                        The following are optional, but required for pagination:
+                            - Whatever class defined for option 'pageFirst', default: '.wc-first-page'
+                            - Whatever class defined for option 'pageLast', default: '.wc-last-page'
+                            - Whatever class defined for option 'pageNext', default: '.wc-page-next'
+                            - Whatever class defined for option 'pageBack', default: '.wc-page-back'
 
     tplLocation         The template that generates each location record, must be a string
+                        Can have any of the following keys:
+                            {address}
+                            {agentCode}
+                            {lat}
+                            {lng}
+                            {country}
+                            {currency}
+                            {distance}
+                            {hours}
+                            {name}
+                            {phone}
 
     tplNoData           The template that is displayed in case no data is returned from the
                         server or an ajax error occurred, can be string / html / jQuery
+
     tplLoading          The template that is displayed while the ajax call is running, can be
                         string / html / jQuery
 
@@ -75,9 +97,7 @@ All of these forms of instantiation require that you provide an object as a para
     recordActive        [DEFAULT: 'wc-active'] A css class that is toggled when a map
                         marker gets a mouseover / mouseout event
 
-
 Available Methods using the jQuery pattern:
-
 
     $('container').WCServiceLocationsView( 'METHOD' )
 
@@ -88,8 +108,8 @@ Available Methods using the jQuery pattern:
     next                 Calls the paginator to move to the next page
     back                 Calls the paginator to move to the previous page
     totalPages           Returns the total number of pages available
-    getCurrentPageData   Returns an array with `ServiceLocation` objects in it
     currentPage          Returns the current page number
+    getCurrentPageData   Returns an array with `ServiceLocation` objects in it
 
 
 jQuery listenable events triggered on the container element:
@@ -106,7 +126,7 @@ jQuery listenable events triggered on the container element:
     WCService:onNoData      Triggered when ajax call returned no data
     WCService:onFirstRun    Triggered when initial ajax call is complete (when it got the first page of data)
 
-
+### Note:
 This class uses pagination, therefore requires that the backend server supports `POST` requests with these base parameters:
 
 * `start` : The record we inclusively start counting at, on first page its 0
