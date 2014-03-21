@@ -1,0 +1,65 @@
+{
+    "result": true,
+    "data": [
+        {
+            "address": "CALLE 60  220, Col. FRACC. DEL NORTE, MERIDA, YUCATAN C.P. 97120",
+            "agentCode": "1",
+            "lat": "16.96805229",
+            "lng": "-96.6857303",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE 60  220, Col. FRACC. DEL NORTE, MERIDA, YUCATAN C.P. 97120",
+            "agentCode": "2",
+            "lat": "16.90464318",
+            "lng": "-96.65994892",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE 60  220, Col. FRACC. DEL NORTE, MERIDA, YUCATAN C.P. 97120",
+            "agentCode": "3",
+            "lat": "17.00670363",
+            "lng": "-96.69092774",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE 60  220, Col. FRACC. DEL NORTE, MERIDA, YUCATAN C.P. 97120",
+            "agentCode": "4",
+            "lat": "16.74813944",
+            "lng": "-96.71121255",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE 60  220, Col. FRACC. DEL NORTE, MERIDA, YUCATAN C.P. 97120",
+            "agentCode": "5",
+            "lat": "17.24514805",
+            "lng": "-96.93437302",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        }
+    ]
+}

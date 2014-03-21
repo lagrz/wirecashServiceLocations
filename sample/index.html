@@ -84,22 +84,28 @@
             text-decoration: none;
         }
 
-        .record{
-            padding: 15px;border-bottom: 1px solid #ccc;
+        .record {
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
         }
-        .record:hover, .record.active{
-            background: #f6f6f6;
+
+        .record:hover, [data-agentCode].wc-active {
+            background: #C6E746;
         }
     </style>
 </head>
 <body>
-
+<div style="margin: 20px;text-align: center">
+    <div><a href="index.html?timeout=5">Delay 5 seconds between Ajax Calls</a></div>
+    <div><a href="index.html?timeout=10">Delay 10 seconds between Ajax Calls</a></div>
+    <div><a href="index.html?timeout=15">Delay 15 seconds between Ajax Calls</a></div>
+</div>
 <div id="the-container"></div>
 
 <div style="display: none;">
     <textarea id="tpl-main">
         <div class="block-group"> <!-- First row -->
-            <div class="header block">Sample Service Locations Locations</div>
+            <div class="header block">Ugiliest Sample Service Locations</div>
             <div class="paging block">
                 <ul class="block-group">
                     <li class="wc-first-page"><a href="javascript://">first page</a></li>
@@ -132,16 +138,63 @@
 </div>
 
 <script src="../bower_components/jquery/dist/jquery.js"></script>
-<script src="wcGMaps.js"></script>
-<script src="wcGMapsAPILoader.js"></script>
-<script src="wcPaginator.js"></script>
-<script src="wcServiceLocation.js"></script>
-<script src="wcTemplate.js"></script>
-<script src="wcServiceLocationsGmap.js"></script>
+<script src="../js/wcGMaps.js"></script>
+<script src="../js/wcGMapsAPILoader.js"></script>
+<script src="../js/wcPaginator.js"></script>
+<script src="../js/wcServiceLocation.js"></script>
+<script src="../js/wcTemplate.js"></script>
+<script src="../js/wcServiceLocationsGmap.js"></script>
 <script>
     jQuery(function ($) {
+
+        //Overwrites the request url for sample json
+        $(document).ajaxSend(function (event, jqXHR, settings) {
+            if (settings.url.indexOf('sample.json') !== -1) {
+                var data = {};
+                $.each(settings.data.split('&'), function (i, d) {
+                    d = d.split('=');
+                    data[d[0]] = d[1];
+                });
+                switch (data.start) {
+                    case '0':
+                        settings.url = 'sample1.json';
+                        break;
+                    case '5':
+                        settings.url = 'sample2.json';
+                        break;
+                    case '10':
+                        settings.url = 'sample3.json';
+                        break;
+                }
+            }
+        });
+
+        //proxies the original method with a timeout to see the loading status
+        var original = $.WCServiceLocationsView.fn._handleData;
+        $.WCServiceLocationsView.fn._handleData = function () {
+            var self = this;
+            var args = Array.prototype.slice.call(arguments, 0);
+            var param = (function(name){
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                        results = regex.exec(location.search);
+                return results == null ? 0 : Number(decodeURIComponent(results[1].replace(/\+/g, " "))) || 0;
+            })('timeout');
+
+            if(param){
+                setTimeout(function () {
+                    original.apply(self, args);
+                }, param * 1000);
+            }else{
+                original.apply(self, args);
+            }
+        };
+
+        //gets the config api data for google maps
         $.getJSON('../config/maps_api.json')
                 .done(function (data) {
+
+                    //instantiates the object
                     new $.WCServiceLocationsView({
                         container: $('#the-container'),
                         tplMain: $('#tpl-main').val(),
@@ -152,7 +205,10 @@
                         pagerTotalRecords: 15,
                         mapsAPIKey: data.key
                     });
+
                 })
+
+                //Handles case where no maps api config file is found
                 .fail(function () {
                     $('#the-container').html("<h1 style='text-align: center'>Make sure you have a ../config/maps_api.json File</h1>");
                 });

@@ -1,4 +1,5 @@
 /* jshint camelcase:false*/
+/* global google */
 (function (window, $) {
     'use strict';
 
@@ -19,6 +20,19 @@
     };
 
     GMaps.fn = GMaps.prototype;
+
+    /**
+     * Ensures given object is an array by checking or placing it in one
+     * @param obj
+     * @returns {*}
+     * @private
+     */
+    GMaps.fn._ensureList = function (obj) {
+        if (!$.isArray(obj)) {
+            obj = [obj];
+        }
+        return obj;
+    };
 
     /**
      * Instantiates certain google maps services
@@ -78,9 +92,7 @@
      * @param serviceLocation
      */
     GMaps.fn.createMarker = function (serviceLocation) {
-        if (!$.isArray(serviceLocation)) {
-            serviceLocation = [serviceLocation];
-        }
+        serviceLocation = this._ensureList(serviceLocation);
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var latlng = serviceLocation[i];
             var marker = new google.maps.Marker({//draws the markers
@@ -91,6 +103,15 @@
         }
     };
 
+    GMaps.fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
+        serviceLocation = this._ensureList(serviceLocation);
+        for (var i = 0, s = serviceLocation.length; i < s; i++) {
+            var location = serviceLocation[i];
+            google.maps.event.addListener(location.get('gmapMarker'), 'mouseover', $.proxy(callbackOver, context, location));
+            google.maps.event.addListener(location.get('gmapMarker'), 'mouseout', $.proxy(callbackOut, context, location));
+        }
+    };
+
     /**
      * Toggles a marker
      * @param serviceLocation
@@ -98,9 +119,7 @@
      * @private
      */
     GMaps.fn._toggleMarker = function (serviceLocation, map) {
-        if (!$.isArray(serviceLocation)) {
-            serviceLocation = [serviceLocation];
-        }
+        serviceLocation = this._ensureList(serviceLocation);
         map = map || null;
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
@@ -129,9 +148,7 @@
      * @param serviceLocation
      */
     GMaps.fn.center = function (serviceLocation) {
-        if (!$.isArray(serviceLocation)) {
-            serviceLocation = [serviceLocation];
-        }
+        serviceLocation = this._ensureList(serviceLocation);
         var latlngbounds = new google.maps.LatLngBounds();
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];

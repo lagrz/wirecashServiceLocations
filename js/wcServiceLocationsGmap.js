@@ -37,7 +37,8 @@
 
             //classes added / removed for paging buttons
             pageEnable: 'wc-enable',
-            pageDisable: 'wc-disable'
+            pageDisable: 'wc-disable',
+            recordActive: 'wc-active'
         }, options || {});
 
         this.container = this.options.container;
@@ -148,8 +149,10 @@
             //create objects
             var locations = $.map(data.data, $.proxy(function (obj) {
                 var location = new $.WCServiceLocation(obj);
+                //decorate the location object with gmap
                 this.gmap.setLatLng(location);
                 this.gmap.createMarker(location);
+                this.gmap.createMarkerEvents(location, this._markerMouseEnter, this._markerMouseLeave, this);
                 return location;
             }, this));
             done(locations);
@@ -164,7 +167,6 @@
      * @private
      */
     ServiceLocationsView.fn._loading = function () {
-        console.log('loading');
         this.container.find(this.options.contentContainer).html(this.options.tplLoading);
         this._updatePagerButtons({
             'first': false,
@@ -179,7 +181,6 @@
      * @private
      */
     ServiceLocationsView.fn._noData = function () {
-        console.log('no data found');
         this.container.find(this.options.contentContainer).html(this.options.tplNoData);
         this.container.find(this.options.mapContainer).hide();
         $.each(['pageFirst', 'pageLast', 'pageNext', 'pageBack'], $.proxy(function (index, elem) {
@@ -220,13 +221,13 @@
             target = target.parents('[data-agentcode]');
         }
         if (target.length) {
-            var id = target.data('agentcode')+'';
+            var id = target.data('agentcode') + '';
             var data = this.pager.getCurrentPageData();
             this.gmap.hideMarker(data);
             //find the one we have an id for and show it
             for (var i = 0, s = data.length, location; i < s; i++) {
                 location = data[i];
-                if(location.get('agentCode') === id){
+                if (location.get('agentCode') === id) {
                     this.gmap.showMarker(location);
                 }
             }
@@ -255,6 +256,14 @@
                 }
             }
         }, this));
+    };
+
+    ServiceLocationsView.fn._markerMouseEnter = function(serviceLocation){
+        this.container.find('[data-agentcode="'+serviceLocation.get('agentCode')+'"]').addClass(this.options.recordActive);
+    };
+
+    ServiceLocationsView.fn._markerMouseLeave = function(serviceLocation){
+        this.container.find('[data-agentcode="'+serviceLocation.get('agentCode')+'"]').removeClass(this.options.recordActive);
     };
 
     $.WCServiceLocationsView = ServiceLocationsView;

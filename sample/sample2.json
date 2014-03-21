@@ -1,0 +1,65 @@
+{
+    "result": true,
+    "data": [
+        {
+            "address": "CALLE PUENTE  186, Col. AMSA, TLALPAN ,DF C.P. 14380",
+            "agentCode": "1",
+            "lat": "32.64370913",
+            "lng": "-116.64116179",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE PUENTE  186, Col. AMSA, TLALPAN ,DF C.P. 14380",
+            "agentCode": "2",
+            "lat": "32.75052052",
+            "lng": "-116.92436996",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE PUENTE  186, Col. AMSA, TLALPAN ,DF C.P. 14380",
+            "agentCode": "3",
+            "lat": "32.7261814",
+            "lng": "-117.28926749",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE PUENTE  186, Col. AMSA, TLALPAN ,DF C.P. 14380",
+            "agentCode": "4",
+            "lat": "32.53111576",
+            "lng": "-117.09097985",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        },
+        {
+            "address": "CALLE PUENTE  186, Col. AMSA, TLALPAN ,DF C.P. 14380",
+            "agentCode": "5",
+            "lat": "32.30445801",
+            "lng": "-117.28621424",
+            "country": "MX",
+            "currency": "MXN",
+            "distance": "1.34",
+            "hours": "10-5pm",
+            "name": "Elektra",
+            "phone": "+5213337774040"
+        }
+    ]
+}

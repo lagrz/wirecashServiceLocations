@@ -65,13 +65,15 @@
         };
     };
 
-    fn.getData = function (pageNo) {
-        var self = this;
-        this.recs.params = $.extend(this.recs.params, this.calculateRange(pageNo));
-
+    fn.beforePaging = function(){
         if(this.recs.data[this.recs.currPage]){
             this.recs.onBeforePage(this.recs.data[this.recs.currPage]);
         }
+    };
+
+    fn.getData = function (pageNo) {
+        var self = this;
+        this.recs.params = $.extend(this.recs.params, this.calculateRange(pageNo));
 
         //page already exists in the cache use it
         if (this.recs.data[pageNo]) {
@@ -150,24 +152,28 @@
     };
 
     fn.next = function () {
+        this.beforePaging();
         this.recs.currPage++;
         this.getData(this.recs.currPage);
         return this;
     };
 
     fn.back = function () {
+        this.beforePaging();
         this.recs.currPage--;
         this.getData(this.recs.currPage);
         return this;
     };
 
     fn.first = function () {
+        this.beforePaging();
         this.recs.currPage = 0;
         this.getData(0);//get the first page
         return this;
     };
 
     fn.last = function () {
+        this.beforePaging();
         this.recs.currPage = this.recs.totalPages - 1;
 
         //set page to last page
