@@ -199,24 +199,54 @@
         this.boundMethods.next = [container.find(this.options.pageNext), $.proxy(this.pager.next, this.pager)];
         this.boundMethods.prev = [container.find(this.options.pageBack), $.proxy(this.pager.back, this.pager)];
 
-        $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index,item) {
+        $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index, item) {
             if (this.boundMethods[item][0].length) {
                 this.boundMethods[item][0].on('click', this.boundMethods[item][1]).addClass(this.options.pageEnable);
             }
         }, this));
 
         this._updatePagerButtons();
+
+        //create a global listener for mousein, mouseout if that data-agentCode tag is available
+        if (container.find('[data-agentCode]').length) {
+            container.on('mouseenter', '[data-agentCode]', $.proxy(this._onHover, this));
+            container.on('mouseleave', '[data-agentCode]', $.proxy(this._onMouseLeave, this));
+        }
+    };
+
+    ServiceLocationsView.fn._onHover = function (event) {
+        var target = $(event.target);
+        if (!target.is('[data-agentcode]')) {
+            target = target.parents('[data-agentcode]');
+        }
+        if (target.length) {
+            var id = target.data('agentcode')+'';
+            var data = this.pager.getCurrentPageData();
+            this.gmap.hideMarker(data);
+            //find the one we have an id for and show it
+            for (var i = 0, s = data.length, location; i < s; i++) {
+                location = data[i];
+                if(location.get('agentCode') === id){
+                    this.gmap.showMarker(location);
+                }
+            }
+        }
+    };
+
+    ServiceLocationsView.fn._onMouseLeave = function (event) {
+        var data = this.pager.getCurrentPageData();
+        this.gmap.showMarker(data);
     };
 
     /**
      * Updates the pager buttons based on current page, optional param used to overwrite settings
-     * @param pagerControls
+     * @param [pagerControls]
      * @private
      */
     ServiceLocationsView.fn._updatePagerButtons = function (pagerControls) {
         var controls = pagerControls || this.pager.pageControls();
-        $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index,item) {
-            if(this.boundMethods.hasOwnProperty(item)){
+        $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index, item) {
+            if (this.boundMethods.hasOwnProperty(item)) {
                 this.boundMethods[item][0].removeClass(this.options.pageEnable + ' ' + this.options.pageDisable);
                 this.boundMethods[item][0].off('click', this.boundMethods[item][1]).addClass(this.options.pageDisable);
                 if (controls[item]) {

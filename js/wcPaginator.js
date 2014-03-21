@@ -35,6 +35,10 @@
 
     var fn = Pager.fn = Pager.prototype;
 
+    fn.getCurrentPageData = function(){
+        return this.recs.data[this.recs.currPage];
+    };
+
     fn.totalPages = function () {
         //calculate the total amount of pages
         this.recs.totalPages = Math.ceil(this.recs.total / this.recs.show);

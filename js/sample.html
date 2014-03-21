@@ -83,6 +83,13 @@
             color: #ccc;
             text-decoration: none;
         }
+
+        .record{
+            padding: 15px;border-bottom: 1px solid #ccc;
+        }
+        .record:hover, .record.active{
+            background: #f6f6f6;
+        }
     </style>
 </head>
 <body>
@@ -107,7 +114,7 @@
         </div>
     </textarea>
     <textarea id="tpl-location">
-        <div style="padding: 15px;border-bottom: 1px solid #ccc;">
+        <div class="record" data-agentCode="{agentCode}">
             <div>address: {address}</div>
             <div>country: {country}</div>
             <div>distance: {distance}</div>

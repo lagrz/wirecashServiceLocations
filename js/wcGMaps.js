@@ -94,7 +94,7 @@
     /**
      * Toggles a marker
      * @param serviceLocation
-     * @param map
+     * @param [map]
      * @private
      */
     GMaps.fn._toggleMarker = function (serviceLocation, map) {
@@ -121,7 +121,7 @@
      * @param serviceLocation
      */
     GMaps.fn.hideMarker = function (serviceLocation) {
-        this._toggleMarker(serviceLocation, this.map);
+        this._toggleMarker(serviceLocation);
     };
 
     /**
