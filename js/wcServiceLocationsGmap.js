@@ -1,6 +1,26 @@
 (function (window, $, google) {
     'use strict';
 
+    var elemIdCounter = 0;
+    var ObjectCache = {};
+
+    /**
+     * Grabs the element id and returns it otherwise it will identify it
+     * @param $elem
+     * @returns {*}
+     */
+    function elemId($elem) {
+        var id = $elem.attr('id');
+        if (id) {
+            return id;
+        }
+        do {
+            id = 'anonymous_element_' + elemIdCounter++;
+        } while ($('#' + id)[0]);
+        $elem.attr('id', id);
+        return id;
+    }
+
     //tplMain MUST CONTAIN ELEMENTS WITH these CLASSES:
     //      - wc-first-page, wc-last-page, wc-page-next, wc-page-back
     //      - wc-map-container
@@ -38,6 +58,8 @@
             //classes added / removed for paging buttons
             pageEnable: 'wc-enable',
             pageDisable: 'wc-disable',
+
+            //class added / removed when a related marker gets mouseover / mouseout event
             recordActive: 'wc-active'
         }, options || {});
 
@@ -88,6 +110,8 @@
                 this.gmap = new $.WCGmaps({
                     container: this.container.find(this.options.mapContainer)
                 });
+
+                this.container.trigger('WCService:create');
             }, this),
 
             onBeforePage: $.proxy(this._beforePage, this),
@@ -113,6 +137,7 @@
      */
     ServiceLocationsView.fn._beforePage = function (serviceLocations) {
         this.gmap.hideMarker(serviceLocations);
+        this.container.trigger('WCService:beforePage');
     };
 
     /**
@@ -136,6 +161,7 @@
         //update the markers
         this.gmap.showMarker(serviceLocations);
         this.gmap.center(serviceLocations);
+        this.container.trigger('WCService:onPage');
     };
 
     /**
@@ -160,6 +186,7 @@
             //show no data
             done([]);
         }
+        this.container.trigger('WCService:onData', data);
     };
 
     /**
@@ -174,6 +201,7 @@
             'next': false,
             'last': false
         });
+        this.container.trigger('WCService:onLoading');
     };
 
     /**
@@ -186,6 +214,7 @@
         $.each(['pageFirst', 'pageLast', 'pageNext', 'pageBack'], $.proxy(function (index, elem) {
             this.container.find(this.options[elem]).hide();
         }, this));
+        this.container.trigger('WCService:onNoData');
     };
 
     /**
@@ -213,6 +242,8 @@
             container.on('mouseenter', '[data-agentCode]', $.proxy(this._onHover, this));
             container.on('mouseleave', '[data-agentCode]', $.proxy(this._onMouseLeave, this));
         }
+
+        this.container.trigger('WCService:onFirstRun');
     };
 
     /**
@@ -285,5 +316,53 @@
     };
 
     $.WCServiceLocationsView = ServiceLocationsView;
+
+    /**
+     * Basic Object factory
+     * @param options
+     */
+    $.WCServiceLocationsView.create = function(options){
+        var id = elemId($(options.container));
+        //only instantiate once
+        if(!ObjectCache.hasOwnProperty(id)){
+            ObjectCache[id] = new ServiceLocationsView(options);
+        }
+    };
+
+    $.fn.WCServiceLocationsView = function (options) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        var id = elemId($(this[0]));
+        var ret;
+        if(ObjectCache.hasOwnProperty(id)){
+            var obj = ObjectCache[id];
+
+            switch(options){
+                case 'first':
+                case 'last':
+                case 'next':
+                case 'back':
+                    obj.pager[options].apply(obj.pager, args);
+                    ret = obj;
+                    break;
+                case 'totalPages':
+                case 'getCurrentPageData':
+                    ret = obj.pager[options].apply(obj.pager, args);
+                    break;
+                case 'currentPage':
+                    ret = obj.pager.getCurrentPage();
+                    break;
+                default:
+                    ret = obj;
+            }
+
+            return ret;
+        }
+        return this.each(function(){
+            //clone options
+            var opts = jQuery.extend({}, options);
+            opts.container = $(this);
+            $.WCServiceLocationsView.create(opts);
+        });
+    };
 
 })(this, this.jQuery, this.google);

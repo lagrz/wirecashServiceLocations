@@ -35,6 +35,10 @@
 
     var fn = Pager.fn = Pager.prototype;
 
+    fn.getCurrentPage = function(){
+        return this.recs.currPage;
+    };
+
     fn.getCurrentPageData = function(){
         return this.recs.data[this.recs.currPage];
     };

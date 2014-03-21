@@ -194,9 +194,8 @@
         $.getJSON('../config/maps_api.json')
                 .done(function (data) {
 
-                    //instantiates the object
-                    new $.WCServiceLocationsView({
-                        container: $('#the-container'),
+                    //instantiates the object using the plugin Pattern
+                    $('#the-container').WCServiceLocationsView({
                         tplMain: $('#tpl-main').val(),
                         tplLocation: $('#tpl-location').val(),
                         tplNoData: $('#tpl-noData').val(),
