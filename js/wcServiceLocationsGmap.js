@@ -215,6 +215,11 @@
         }
     };
 
+    /**
+     * Handles hover event for each record
+     * @param event
+     * @private
+     */
     ServiceLocationsView.fn._onHover = function (event) {
         var target = $(event.target);
         if (!target.is('[data-agentcode]')) {
@@ -234,7 +239,11 @@
         }
     };
 
-    ServiceLocationsView.fn._onMouseLeave = function (event) {
+    /**
+     * Handles mouse out event for each record
+     * @private
+     */
+    ServiceLocationsView.fn._onMouseLeave = function () {
         var data = this.pager.getCurrentPageData();
         this.gmap.showMarker(data);
     };
@@ -257,13 +266,22 @@
             }
         }, this));
     };
-
-    ServiceLocationsView.fn._markerMouseEnter = function(serviceLocation){
-        this.container.find('[data-agentcode="'+serviceLocation.get('agentCode')+'"]').addClass(this.options.recordActive);
+    /**
+     * Adds active class to record
+     * @param serviceLocation
+     * @private
+     */
+    ServiceLocationsView.fn._markerMouseEnter = function (serviceLocation) {
+        this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').addClass(this.options.recordActive);
     };
 
-    ServiceLocationsView.fn._markerMouseLeave = function(serviceLocation){
-        this.container.find('[data-agentcode="'+serviceLocation.get('agentCode')+'"]').removeClass(this.options.recordActive);
+    /**
+     * Removes active from record
+     * @param serviceLocation
+     * @private
+     */
+    ServiceLocationsView.fn._markerMouseLeave = function (serviceLocation) {
+        this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
     };
 
     $.WCServiceLocationsView = ServiceLocationsView;
