@@ -19,7 +19,7 @@
         this._initGmaps();
     };
 
-    GMaps.fn = GMaps.prototype;
+    var fn = GMaps.fn = GMaps.prototype;
 
     /**
      * Ensures given object is an array by checking or placing it in one
@@ -27,7 +27,7 @@
      * @returns {*}
      * @private
      */
-    GMaps.fn._ensureList = function (obj) {
+    fn._ensureList = function (obj) {
         if (!$.isArray(obj)) {
             obj = [obj];
         }
@@ -38,7 +38,7 @@
      * Instantiates certain google maps services
      * @private
      */
-    GMaps.fn._initGmaps = function () {
+    fn._initGmaps = function () {
         this.geocoder = new google.maps.Geocoder();
         var latlng = new google.maps.LatLng(-104.8352628, 37.9452861);
         var myOptions = {
@@ -54,7 +54,7 @@
      * @param serviceLocation An object containing lat lng keys or an array containing the various address sections
      * @param callback Argument given to callback is either false if failed or an object with latlng key and normalized address key
      */
-    GMaps.fn.geoCodeAddress = function (serviceLocation, callback) {
+    fn.geoCodeAddress = function (serviceLocation, callback) {
         var addressRequest = {};
         if ($.isArray(serviceLocation.get('address'))) {
             var location = $.map(serviceLocation.get('address'),function (val) {
@@ -83,7 +83,7 @@
      * Sets a Google LatLng object to ServiceLocation object
      * @param serviceLocation
      */
-    GMaps.fn.setLatLng = function (serviceLocation) {
+    fn.setLatLng = function (serviceLocation) {
         if (serviceLocation.get('lat') !== 0) {
             var latlnt = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
             serviceLocation.set('gmapLatLng', latlnt);
@@ -94,7 +94,7 @@
      * Creates the google maps marker
      * @param serviceLocation
      */
-    GMaps.fn.createMarker = function (serviceLocation) {
+    fn.createMarker = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var latlng = serviceLocation[i];
@@ -113,7 +113,7 @@
      * @param callbackOut
      * @param context
      */
-    GMaps.fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
+    fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
         serviceLocation = this._ensureList(serviceLocation);
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
@@ -128,7 +128,7 @@
      * @param [map]
      * @private
      */
-    GMaps.fn._toggleMarker = function (serviceLocation, map) {
+    fn._toggleMarker = function (serviceLocation, map) {
         serviceLocation = this._ensureList(serviceLocation);
         map = map || null;
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
@@ -141,7 +141,7 @@
      * Shows a marker
      * @param serviceLocation
      */
-    GMaps.fn.showMarker = function (serviceLocation) {
+    fn.showMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation, this.map);
     };
 
@@ -149,7 +149,7 @@
      * Hides a marker
      * @param serviceLocation
      */
-    GMaps.fn.hideMarker = function (serviceLocation) {
+    fn.hideMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation);
     };
 
@@ -157,7 +157,7 @@
      * Centers the viewport of the map based on the provided servicelocation(s)
      * @param serviceLocation
      */
-    GMaps.fn.center = function (serviceLocation) {
+    fn.center = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
         var latlngbounds = new google.maps.LatLngBounds();
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
@@ -172,5 +172,12 @@
         }
     };
 
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.GMaps = GMaps;
+
     $.WCGmaps = GMaps;
+
 })(this, this.jQuery);

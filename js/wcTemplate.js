@@ -11,6 +11,12 @@
         return tpl;
     }
 
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.template = template;
+
     $.WCTemplate = template;
 
 })(this, this.jQuery);

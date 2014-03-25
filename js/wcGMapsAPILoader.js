@@ -72,6 +72,12 @@
         }
     };
 
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.GmapsAPILoader = WCGmapsAPILoader;
+
     $.WCGmapsAPILoader = WCGmapsAPILoader;
 
 })(this, this.jQuery, this.google);

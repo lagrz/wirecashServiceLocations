@@ -5,7 +5,7 @@
      * Paginator class
      * @type {WCPaginator}
      */
-    var Pager = $.WCPaginator = function (opts) {
+    var Pager = function (opts) {
         //extend default settings
         this.recs = $.extend({}, {
             show: 15,
@@ -252,5 +252,13 @@
         }
         return this;
     };
+
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.Pager = Pager;
+
+    $.WCPaginator = Pager;
 
 })(this, this.jQuery);

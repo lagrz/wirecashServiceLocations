@@ -26,12 +26,14 @@
         }, data || {});
     };
 
+    var fn = WCServiceLocation.fn = WCServiceLocation.prototype;
+
     /**
      * Gets specified data
      * @param key
      * @returns {*}
      */
-    WCServiceLocation.prototype.get = function (key) {
+    fn.get = function (key) {
         if (this.data.hasOwnProperty(key)) {
             return this.data[key];
         }
@@ -43,7 +45,7 @@
      * @param key
      * @param val
      */
-    WCServiceLocation.prototype.set = function (key, val) {
+    fn.set = function (key, val) {
         this.data[key] = val;
     };
 
@@ -51,7 +53,7 @@
      * Returns an object without excluded items
      * @returns {*}
      */
-    WCServiceLocation.prototype.toJSON = function () {
+    fn.toJSON = function () {
         var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
         var clone = $.extend({}, this.data);
         for (var i = 0, s = exclude.length; i < s; i++) {
@@ -60,5 +62,12 @@
         return clone;
     };
 
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.ServiceLocation = WCServiceLocation;
+
     $.WCServiceLocation = WCServiceLocation;
+
 })(this, this.jQuery, this.google);

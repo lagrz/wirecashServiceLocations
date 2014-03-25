@@ -85,12 +85,12 @@
         }
     };
 
-    ServiceLocationsView.fn = ServiceLocationsView.prototype;
+    var fn = ServiceLocationsView.fn = ServiceLocationsView.prototype;
 
     /**
      * Instantiates our pager object with various callback settings ran after we have google object in the global scope
      */
-    ServiceLocationsView.fn.init = function () {
+    fn.init = function () {
         //create the pager and its callbacks
         //create the gmap object once we get data for the first time
         var noDataCallback = $.proxy(this._noData, this);
@@ -140,7 +140,7 @@
      * @param serviceLocations
      * @private
      */
-    ServiceLocationsView.fn._beforePage = function (serviceLocations) {
+    fn._beforePage = function (serviceLocations) {
         this.gmap.hideMarker(serviceLocations);
         this.container.trigger('WCService:beforePage');
     };
@@ -150,7 +150,7 @@
      * @param serviceLocations
      * @private
      */
-    ServiceLocationsView.fn._showPage = function (serviceLocations) {
+    fn._showPage = function (serviceLocations) {
         var content = '';
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
@@ -175,7 +175,7 @@
      * @param data
      * @private
      */
-    ServiceLocationsView.fn._handleData = function (done, data) {
+    fn._handleData = function (done, data) {
         if (data.result) {
             //create objects
             var locations = $.map(data.data, $.proxy(function (obj) {
@@ -198,7 +198,7 @@
      * Callback Shows loading display
      * @private
      */
-    ServiceLocationsView.fn._loading = function () {
+    fn._loading = function () {
         this.container.find(this.options.contentContainer).html(this.options.tplLoading);
         this._updatePagerButtons({
             'first': false,
@@ -213,7 +213,7 @@
      * Callback Used when an ajax error occurred or empty array came back from the server, displays no data message
      * @private
      */
-    ServiceLocationsView.fn._noData = function () {
+    fn._noData = function () {
         this.container.find(this.options.contentContainer).html(this.options.tplNoData);
         this.container.find(this.options.mapContainer).hide();
         $.each(['pageFirst', 'pageLast', 'pageNext', 'pageBack'], $.proxy(function (index, elem) {
@@ -226,7 +226,7 @@
      * Callback after first on page, this callback is only ran once used to setup the paging buttons
      * @private
      */
-    ServiceLocationsView.fn._firstRun = function () {
+    fn._firstRun = function () {
         //on first run create the listeners for the paging
         var container = this.container;
         this.boundMethods.first = [container.find(this.options.pageFirst), $.proxy(this.pager.first, this.pager)];
@@ -256,7 +256,7 @@
      * @param event
      * @private
      */
-    ServiceLocationsView.fn._onHover = function (event) {
+    fn._onHover = function (event) {
         var target = $(event.target);
         if (!target.is('[data-agentcode]')) {
             target = target.parents('[data-agentcode]');
@@ -279,7 +279,7 @@
      * Handles mouse out event for each record
      * @private
      */
-    ServiceLocationsView.fn._onMouseLeave = function () {
+    fn._onMouseLeave = function () {
         var data = this.pager.getCurrentPageData();
         this.gmap.showMarker(data);
     };
@@ -289,7 +289,7 @@
      * @param [pagerControls]
      * @private
      */
-    ServiceLocationsView.fn._updatePagerButtons = function (pagerControls) {
+    fn._updatePagerButtons = function (pagerControls) {
         var controls = pagerControls || this.pager.pageControls();
         $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index, item) {
             if (this.boundMethods.hasOwnProperty(item)) {
@@ -307,7 +307,7 @@
      * @param serviceLocation
      * @private
      */
-    ServiceLocationsView.fn._markerMouseEnter = function (serviceLocation) {
+    fn._markerMouseEnter = function (serviceLocation) {
         this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').addClass(this.options.recordActive);
     };
 
@@ -316,9 +316,15 @@
      * @param serviceLocation
      * @private
      */
-    ServiceLocationsView.fn._markerMouseLeave = function (serviceLocation) {
+    fn._markerMouseLeave = function (serviceLocation) {
         this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
     };
+
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.ServiceLocationsView = ServiceLocationsView;
 
     $.WCServiceLocationsView = ServiceLocationsView;
 

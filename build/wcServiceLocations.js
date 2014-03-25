@@ -1,61 +1,3 @@
-/* jshint camelcase:false*/
-(function (window, $, google) {
-    'use strict';
-
-    var WCGmapsAPILoader = {
-        defaultOptions: {
-            key: '',
-            sensor: false,
-            gmapsLoaded: $.noop
-        },
-        init: function (options) {
-            options = $.extend({}, this.defaultOptions, options || {});
-            this.loadGmaps(options);
-        },
-        buildGlobalCallback: function (options) {
-            var cb = 'gmap_' + Date.now();
-            window[cb] = function () {
-                //google maps api is now loaded
-                google = window.google;
-                options.gmapsLoaded(google);
-                delete window[cb];
-            };
-            return cb;
-        },
-        buildUrl: function (cb, options) {
-            var base = 'https://maps.googleapis.com/maps/api/js?';
-            if (options.key.length !== 0) {
-                var params = $.extend({}, options, {
-                    callback: cb,
-                    v: 3
-                });
-                delete  params.gmapsLoaded;
-                return base + $.param(params);
-            }
-            throw new Error('Invalid set of options');
-        },
-        loadGmaps: function (options) {
-            if (!google && options.key.length !== 0) {
-                var s = document.createElement('script');
-                var cb = this.buildGlobalCallback(options);
-                try {
-                    var url = this.buildUrl(cb, options);
-                    s.type = 'text/javascript';
-                    s.src = url;
-                    $('head').append(s);
-                } catch (e) {
-                    //die
-                }
-            } else {
-                options.gmapsLoaded(window.google);
-            }
-        }
-    };
-
-    $.WCGmapsAPILoader = WCGmapsAPILoader;
-
-})(this, this.jQuery, this.google);
-
 (function (window, $) {
     'use strict';
 
@@ -77,46 +19,78 @@
 (function (window, $, google) {
     'use strict';
 
-    var WCServiceLocation = function (data) {
-        this.data = $.extend({
-            address: null,
-            agentCode: null,
-            lat: 0,
-            lng: 0,
-            country: null,
-            currency: null,
-            distance: 0,
-            hours: null,
-            name: null,
-            phone: null,
-            //Google maps objects
-            gmapMarker: null,
-            gmapLatLng: null,
-            gmapAddress: null
-        }, data || {});
-    };
+    var WCGmapsAPILoader = {
+        /**
+         * Dynamically loads the google maps api options:
+         * key: maps api key, sensor: use sensor, gmapsLoaded: callback when done loading
+         * @param options
+         */
+        init: function (options) {
+            options = $.extend({
+                key: '',
+                sensor: false,
+                gmapsLoaded: $.noop
+            }, options || {});
 
-    WCServiceLocation.prototype.get = function (key) {
-        if (this.data.hasOwnProperty(key)) {
-            return this.data[key];
+            this.loadGmaps(options);
+        },
+        /**
+         * Creates a callback in the global scope removes it after
+         * @param options
+         * @returns {string}
+         */
+        buildGlobalCallback: function (options) {
+            var cb = 'gmap_' + Date.now();
+            window[cb] = function () {
+                //google maps api is now loaded
+                google = window.google;
+                options.gmapsLoaded(google);
+                delete window[cb];
+            };
+            return cb;
+        },
+        /**
+         * Creates the url string with api key
+         * @param cb
+         * @param options
+         * @returns {string}
+         */
+        buildUrl: function (cb, options) {
+            var base = 'https://maps.googleapis.com/maps/api/js?';
+            if (options.key.length !== 0) {
+                var params = $.extend({}, options, {
+                    callback: cb,
+                    v: 3
+                });
+                delete  params.gmapsLoaded;
+                return base + $.param(params);
+            }
+            throw new Error('Invalid set of options');
+        },
+        /**
+         * Dynamically loads the google maps api js file
+         * @param options
+         */
+        loadGmaps: function (options) {
+            if (!google && options.key.length !== 0) {
+                var s = document.createElement('script');
+                var cb = this.buildGlobalCallback(options);
+                try {
+                    var url = this.buildUrl(cb, options);
+                    s.type = 'text/javascript';
+                    s.src = url;
+                    $('head').append(s);
+                } catch (e) {
+                    //die
+                }
+            } else {
+                options.gmapsLoaded(window.google);
+            }
         }
-        return undefined;
     };
 
-    WCServiceLocation.prototype.set = function (key, val) {
-        this.data[key] = val;
-    };
+    $.WCGmapsAPILoader = WCGmapsAPILoader;
 
-    WCServiceLocation.prototype.toJSON = function () {
-        var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
-        var clone = $.extend({}, this.data);
-        for (var i = 0, s = exclude.length; i < s; i++) {
-            delete clone[exclude[i]];
-        }
-        return clone;
-    };
-
-    $.WCServiceLocation = WCServiceLocation;
 })(this, this.jQuery, this.google);
 
 /* jshint camelcase:false*/
@@ -140,7 +114,7 @@
         this._initGmaps();
     };
 
-    GMaps.fn = GMaps.prototype;
+    var fn = GMaps.fn = GMaps.prototype;
 
     /**
      * Ensures given object is an array by checking or placing it in one
@@ -148,7 +122,7 @@
      * @returns {*}
      * @private
      */
-    GMaps.fn._ensureList = function (obj) {
+    fn._ensureList = function (obj) {
         if (!$.isArray(obj)) {
             obj = [obj];
         }
@@ -159,7 +133,7 @@
      * Instantiates certain google maps services
      * @private
      */
-    GMaps.fn._initGmaps = function () {
+    fn._initGmaps = function () {
         this.geocoder = new google.maps.Geocoder();
         var latlng = new google.maps.LatLng(-104.8352628, 37.9452861);
         var myOptions = {
@@ -175,7 +149,7 @@
      * @param serviceLocation An object containing lat lng keys or an array containing the various address sections
      * @param callback Argument given to callback is either false if failed or an object with latlng key and normalized address key
      */
-    GMaps.fn.geoCodeAddress = function (serviceLocation, callback) {
+    fn.geoCodeAddress = function (serviceLocation, callback) {
         var addressRequest = {};
         if ($.isArray(serviceLocation.get('address'))) {
             var location = $.map(serviceLocation.get('address'),function (val) {
@@ -200,8 +174,11 @@
             }
         });
     };
-
-    GMaps.fn.setLatLng = function (serviceLocation) {
+    /**
+     * Sets a Google LatLng object to ServiceLocation object
+     * @param serviceLocation
+     */
+    fn.setLatLng = function (serviceLocation) {
         if (serviceLocation.get('lat') !== 0) {
             var latlnt = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
             serviceLocation.set('gmapLatLng', latlnt);
@@ -212,7 +189,7 @@
      * Creates the google maps marker
      * @param serviceLocation
      */
-    GMaps.fn.createMarker = function (serviceLocation) {
+    fn.createMarker = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var latlng = serviceLocation[i];
@@ -224,7 +201,14 @@
         }
     };
 
-    GMaps.fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
+    /**
+     * Creates Hover mouse event for markers
+     * @param serviceLocation
+     * @param callbackOver
+     * @param callbackOut
+     * @param context
+     */
+    fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
         serviceLocation = this._ensureList(serviceLocation);
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
@@ -239,7 +223,7 @@
      * @param [map]
      * @private
      */
-    GMaps.fn._toggleMarker = function (serviceLocation, map) {
+    fn._toggleMarker = function (serviceLocation, map) {
         serviceLocation = this._ensureList(serviceLocation);
         map = map || null;
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
@@ -252,7 +236,7 @@
      * Shows a marker
      * @param serviceLocation
      */
-    GMaps.fn.showMarker = function (serviceLocation) {
+    fn.showMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation, this.map);
     };
 
@@ -260,7 +244,7 @@
      * Hides a marker
      * @param serviceLocation
      */
-    GMaps.fn.hideMarker = function (serviceLocation) {
+    fn.hideMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation);
     };
 
@@ -268,7 +252,7 @@
      * Centers the viewport of the map based on the provided servicelocation(s)
      * @param serviceLocation
      */
-    GMaps.fn.center = function (serviceLocation) {
+    fn.center = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
         var latlngbounds = new google.maps.LatLngBounds();
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
@@ -289,6 +273,10 @@
 (function (win, $) {
     'use strict';
 
+    /**
+     * Paginator class
+     * @type {WCPaginator}
+     */
     var Pager = $.WCPaginator = function (opts) {
         //extend default settings
         this.recs = $.extend({}, {
@@ -323,20 +311,37 @@
 
     var fn = Pager.fn = Pager.prototype;
 
+    /**
+     * Returns the current page
+     * @returns {number|$.WCPaginator.recs.currPage}
+     */
     fn.getCurrentPage = function(){
         return this.recs.currPage;
     };
 
+    /**
+     * Returns an array containing the data for the current page
+     * @returns {*}
+     */
     fn.getCurrentPageData = function(){
         return this.recs.data[this.recs.currPage];
     };
 
+    /**
+     * Calculates the total number of pages
+     * @returns {number|$.WCPaginator.recs.totalPages}
+     */
     fn.totalPages = function () {
         //calculate the total amount of pages
         this.recs.totalPages = Math.ceil(this.recs.total / this.recs.show);
         return this.recs.totalPages;
     };
 
+    /**
+     * Calculates the range for the page number (start, end)
+     * @param pageNo
+     * @returns {{start: number, end: number}}
+     */
     fn.calculateRange = function (pageNo) {
         //get start record number
         var s = (pageNo * this.recs.show);
@@ -357,12 +362,20 @@
         };
     };
 
+    /**
+     * Performs a callback before calling on page callback
+     */
     fn.beforePaging = function(){
         if(this.recs.data[this.recs.currPage]){
             this.recs.onBeforePage(this.recs.data[this.recs.currPage]);
         }
     };
 
+    /**
+     * Grabs data from server via ajax call or from local cache
+     * @param pageNo
+     * @returns {Pager.fn}
+     */
     fn.getData = function (pageNo) {
         var self = this;
         this.recs.params = $.extend(this.recs.params, this.calculateRange(pageNo));
@@ -398,6 +411,11 @@
         return this;
     };
 
+    /**
+     * Function called after ajax call is complete and
+     * any data sanitation was performed from the 'onAjaxSuccess' callback
+     * @param json
+     */
     fn.ajaxSuccess = function (json) {
         var pageNo = this.recs.currPage;
 
@@ -421,6 +439,11 @@
         this.recs.onPage(this.recs.data[pageNo], this);
     };
 
+    /**
+     * Returns an object with key and either true or false
+     * for each pagination control
+     * @returns {{first: *, prev: *, next: *, last: *}}
+     */
     fn.pageControls = function () {
         var page = this.recs.currPage;
         var first, prev, next, last;
@@ -443,13 +466,20 @@
         };
     };
 
+    /**
+     * Moves to the next page
+     * @returns {Pager.fn}
+     */
     fn.next = function () {
         this.beforePaging();
         this.recs.currPage++;
         this.getData(this.recs.currPage);
         return this;
     };
-
+    /**
+     * Moves to the previous page
+     * @returns {Pager.fn}
+     */
     fn.back = function () {
         this.beforePaging();
         this.recs.currPage--;
@@ -457,6 +487,10 @@
         return this;
     };
 
+    /**
+     * Moves to the first page
+     * @returns {Pager.fn}
+     */
     fn.first = function () {
         this.beforePaging();
         this.recs.currPage = 0;
@@ -464,6 +498,10 @@
         return this;
     };
 
+    /**
+     * Moves to the last page
+     * @returns {Pager.fn}
+     */
     fn.last = function () {
         this.beforePaging();
         this.recs.currPage = this.recs.totalPages - 1;
@@ -473,7 +511,88 @@
         return this;
     };
 
+    /**
+     * Moves to specified page if its in range
+     * @param pageNo
+     * @returns {Pager.fn}
+     */
+    fn.page = function(pageNo){
+        this.beforePaging();
+        if(pageNo < this.recs.totalPages && pageNo >= 0){
+            this.recs.currPage = pageNo;
+            this.getData(pageNo);
+        }
+        return this;
+    };
+
 })(this, this.jQuery);
+
+/* jshint camelcase:false*/
+(function (window, $, google) {
+    'use strict';
+
+    /**
+     * Basic Object with setter and getter representing base data for ServiceLocation
+     * @param data
+     * @constructor
+     */
+    var WCServiceLocation = function (data) {
+        this.data = $.extend({
+            address: null,
+            agentCode: null,
+            lat: 0,
+            lng: 0,
+            country: null,
+            currency: null,
+            distance: 0,
+            hours: null,
+            name: null,
+            phone: null,
+            //Google maps objects
+            gmapMarker: null,
+            gmapLatLng: null,
+            gmapAddress: null
+        }, data || {});
+    };
+
+    var fn = WCServiceLocation.fn = WCServiceLocation.prototype;
+
+    /**
+     * Gets specified data
+     * @param key
+     * @returns {*}
+     */
+    fn.get = function (key) {
+        if (this.data.hasOwnProperty(key)) {
+            return this.data[key];
+        }
+        return undefined;
+    };
+
+    /**
+     * Sets specified data
+     * @param key
+     * @param val
+     */
+    fn.set = function (key, val) {
+        this.data[key] = val;
+    };
+
+    /**
+     * Returns an object without excluded items
+     * @returns {*}
+     */
+    fn.toJSON = function () {
+        var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
+        var clone = $.extend({}, this.data);
+        for (var i = 0, s = exclude.length; i < s; i++) {
+            delete clone[exclude[i]];
+        }
+        return clone;
+    };
+
+    $.WCServiceLocation = WCServiceLocation;
+})(this, this.jQuery, this.google);
 
 (function (window, $, google) {
     'use strict';
@@ -503,6 +622,11 @@
     //      - wc-map-container
     //      - wc-content-container
 
+    /**
+     * Main Class for the Services Locations widget
+     * @param options
+     * @constructor
+     */
     var ServiceLocationsView = function (options) {
         this.options = $.extend({
             //the mian container element must be a valid jQuery object
@@ -557,12 +681,12 @@
         }
     };
 
-    ServiceLocationsView.fn = ServiceLocationsView.prototype;
+    var fn = ServiceLocationsView.fn = ServiceLocationsView.prototype;
 
     /**
      * Instantiates our pager object with various callback settings ran after we have google object in the global scope
      */
-    ServiceLocationsView.fn.init = function () {
+    fn.init = function () {
         //create the pager and its callbacks
         //create the gmap object once we get data for the first time
         var noDataCallback = $.proxy(this._noData, this);
@@ -612,7 +736,7 @@
      * @param serviceLocations
      * @private
      */
-    ServiceLocationsView.fn._beforePage = function (serviceLocations) {
+    fn._beforePage = function (serviceLocations) {
         this.gmap.hideMarker(serviceLocations);
         this.container.trigger('WCService:beforePage');
     };
@@ -622,7 +746,7 @@
      * @param serviceLocations
      * @private
      */
-    ServiceLocationsView.fn._showPage = function (serviceLocations) {
+    fn._showPage = function (serviceLocations) {
         var content = '';
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
@@ -647,7 +771,7 @@
      * @param data
      * @private
      */
-    ServiceLocationsView.fn._handleData = function (done, data) {
+    fn._handleData = function (done, data) {
         if (data.result) {
             //create objects
             var locations = $.map(data.data, $.proxy(function (obj) {
@@ -670,7 +794,7 @@
      * Callback Shows loading display
      * @private
      */
-    ServiceLocationsView.fn._loading = function () {
+    fn._loading = function () {
         this.container.find(this.options.contentContainer).html(this.options.tplLoading);
         this._updatePagerButtons({
             'first': false,
@@ -685,7 +809,7 @@
      * Callback Used when an ajax error occurred or empty array came back from the server, displays no data message
      * @private
      */
-    ServiceLocationsView.fn._noData = function () {
+    fn._noData = function () {
         this.container.find(this.options.contentContainer).html(this.options.tplNoData);
         this.container.find(this.options.mapContainer).hide();
         $.each(['pageFirst', 'pageLast', 'pageNext', 'pageBack'], $.proxy(function (index, elem) {
@@ -698,7 +822,7 @@
      * Callback after first on page, this callback is only ran once used to setup the paging buttons
      * @private
      */
-    ServiceLocationsView.fn._firstRun = function () {
+    fn._firstRun = function () {
         //on first run create the listeners for the paging
         var container = this.container;
         this.boundMethods.first = [container.find(this.options.pageFirst), $.proxy(this.pager.first, this.pager)];
@@ -728,7 +852,7 @@
      * @param event
      * @private
      */
-    ServiceLocationsView.fn._onHover = function (event) {
+    fn._onHover = function (event) {
         var target = $(event.target);
         if (!target.is('[data-agentcode]')) {
             target = target.parents('[data-agentcode]');
@@ -751,7 +875,7 @@
      * Handles mouse out event for each record
      * @private
      */
-    ServiceLocationsView.fn._onMouseLeave = function () {
+    fn._onMouseLeave = function () {
         var data = this.pager.getCurrentPageData();
         this.gmap.showMarker(data);
     };
@@ -761,7 +885,7 @@
      * @param [pagerControls]
      * @private
      */
-    ServiceLocationsView.fn._updatePagerButtons = function (pagerControls) {
+    fn._updatePagerButtons = function (pagerControls) {
         var controls = pagerControls || this.pager.pageControls();
         $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index, item) {
             if (this.boundMethods.hasOwnProperty(item)) {
@@ -779,7 +903,7 @@
      * @param serviceLocation
      * @private
      */
-    ServiceLocationsView.fn._markerMouseEnter = function (serviceLocation) {
+    fn._markerMouseEnter = function (serviceLocation) {
         this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').addClass(this.options.recordActive);
     };
 
@@ -788,7 +912,7 @@
      * @param serviceLocation
      * @private
      */
-    ServiceLocationsView.fn._markerMouseLeave = function (serviceLocation) {
+    fn._markerMouseLeave = function (serviceLocation) {
         this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
     };
 
@@ -806,6 +930,12 @@
         }
     };
 
+    /**
+     * jQuery plugin for the ServicesLocationView Class
+     * @param options
+     * @returns {*}
+     * @constructor
+     */
     $.fn.WCServiceLocationsView = function (options) {
         var args = Array.prototype.slice.call(arguments, 1);
         var id = elemId($(this[0]));
