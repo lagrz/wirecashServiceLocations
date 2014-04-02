@@ -107,6 +107,7 @@ Available Methods using the jQuery pattern:
     last                 Calls the paginator to move to the last page
     next                 Calls the paginator to move to the next page
     back                 Calls the paginator to move to the previous page
+    page                 Move to specified page number
     totalPages           Returns the total number of pages available
     currentPage          Returns the current page number
     getCurrentPageData   Returns an array with `ServiceLocation` objects in it

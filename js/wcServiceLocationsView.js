@@ -428,6 +428,13 @@
                 case 'currentPage':
                     ret = obj.pager.getCurrentPage();
                     break;
+                case 'page':
+                    //only use the page command if an argument was given
+                    if(args.length){
+                        obj.pager[options].apply(obj.pager, args);
+                        ret = obj;
+                    }
+                    break;
                 default:
                     ret = obj;
             }
