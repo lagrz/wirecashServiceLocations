@@ -59,6 +59,14 @@ module.exports = function (grunt) {
                     'build/<%=buildFile%>.min.js': ['build/<%=buildFile%>.js']
                 }
             }
+        },
+        jsdoc : {
+            dist : {
+                src: ['js/*.js'], 
+                options: {
+                    destination: 'doc'
+                }
+            }
         }
     });
 
@@ -67,7 +75,8 @@ module.exports = function (grunt) {
         'grunt-contrib-jshint',
         'grunt-contrib-connect',
         'grunt-contrib-concat',
-        'grunt-contrib-uglify'
+        'grunt-contrib-uglify',
+        'grunt-jsdoc'
     ].forEach(
         function (task) {
             grunt.loadNpmTasks(task);

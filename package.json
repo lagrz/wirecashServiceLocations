@@ -1,26 +1,27 @@
 {
-    "name": "wirecash-service-locations",
-    "version": "0.0.1",
-    "engines": {
-        "node": ">= 0.8.0"
-    },
-    "scripts": {
-        "test": "grunt"
-    },
-    "devDependencies": {
-        "grunt-contrib-jshint": "~0.6.0",
-        "grunt-contrib-qunit": "~0.2.0",
-        "grunt-contrib-concat": "~0.3.0",
-        "grunt-contrib-uglify": "~0.3.2",
-        "grunt-contrib-watch": "~0.4.0",
-        "grunt-contrib-clean": "~0.4.0",
-        "grunt": "~0.4.4",
-        "grunt-contrib-connect": "~0.7.1",
-        "karma": "*",
-        "karma-qunit": "*",
-        "karma-jshint-preprocessor": "0.0.2",
-        "karma-jquery": "*",
-        "connect": "~2.14.2",
-        "karma-phantomjs-launcher": "~0.1.2"
-    }
+  "name": "wirecash-service-locations",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-qunit": "~0.2.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-watch": "~0.4.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt": "~0.4.4",
+    "grunt-contrib-connect": "~0.7.1",
+    "karma": "*",
+    "karma-qunit": "*",
+    "karma-jshint-preprocessor": "0.0.2",
+    "karma-jquery": "*",
+    "connect": "~2.14.2",
+    "karma-phantomjs-launcher": "~0.1.2",
+    "grunt-jsdoc": "~0.5.4"
+  }
 }

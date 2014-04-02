@@ -1,13 +1,21 @@
 (function (window, $, google) {
     'use strict';
 
+    if (!window.hasOwnProperty('WC')) {
+        /**
+         * Global Namespace for all classes
+         * @namespace WC
+         */
+        window.WC = {};
+    }
+
     var elemIdCounter = 0;
     var ObjectCache = {};
 
     /**
      * Grabs the element id and returns it otherwise it will identify it
-     * @param $elem
-     * @returns {*}
+     * @param {jQuery} $elem Element to be identified
+     * @returns {string} Identity of the Element
      */
     function elemId($elem) {
         var id = $elem.attr('id');
@@ -21,15 +29,30 @@
         return id;
     }
 
-    //tplMain MUST CONTAIN ELEMENTS WITH these CLASSES:
-    //      - wc-first-page, wc-last-page, wc-page-next, wc-page-back
-    //      - wc-map-container
-    //      - wc-content-container
-
     /**
      * Main Class for the Services Locations widget
-     * @param options
      * @constructor
+     * @param {object} options Options to initialize the class with
+     *
+     * @param {jQuery} options.container
+     * <p>The main container element must be a valid jQuery object, if using the jQuery plugin pattern you can omit this</p>
+     *
+     * @param {string} options.tplMain
+     * <p>The main container template, can be either string or a valid html / jQuery element.</p>
+     * <p>It MUST contain at least an element with the following:</p>
+     * <ul>
+     * <li>Whatever class defined for option 'mapContainer', default: '.wc-map-container'</li>
+     * <li>Whatever class defined for option 'contentContainer', default: '.wc-content-container'</li>
+     * </ul>
+     * <p>The following are optional, but required for pagination:</p>
+     * <ul>
+     * <li>- Whatever class defined for option 'pageFirst', default: '.wc-first-page'</li>
+     * <li>- Whatever class defined for option 'pageLast', default: '.wc-last-page'</li>
+     * <li>- Whatever class defined for option 'pageNext', default: '.wc-page-next'</li>
+     * <li>- Whatever class defined for option 'pageBack', default: '.wc-page-back'</li>
+     * </ul>
+     *
+     * @memberOf WC
      */
     var ServiceLocationsView = function (options) {
         this.options = $.extend({
@@ -84,11 +107,13 @@
             this.init();
         }
     };
-
+    
     var fn = ServiceLocationsView.fn = ServiceLocationsView.prototype;
 
     /**
      * Instantiates our pager object with various callback settings ran after we have google object in the global scope
+     * @method WC.ServiceLocationsView#init
+     * @private
      */
     fn.init = function () {
         //create the pager and its callbacks
@@ -137,7 +162,8 @@
 
     /**
      * Callback ran before running a page, used to hide the current markers
-     * @param serviceLocations
+     * @param {array} serviceLocations
+     * @method WC.ServiceLocationsView#_beforePage
      * @private
      */
     fn._beforePage = function (serviceLocations) {
@@ -147,7 +173,8 @@
 
     /**
      * Callback ran everytime a user changes page, paints template objects to UI, updates pager buttons, adds/shows markers
-     * @param serviceLocations
+     * @param {array} serviceLocations
+     * @method WC.ServiceLocationsView#_showPage
      * @private
      */
     fn._showPage = function (serviceLocations) {
@@ -171,8 +198,9 @@
 
     /**
      * Callback performed everytime pager gets data from ajax. Used to perform preprocessing of data (conversion to objects)
-     * @param done Callback call this call back when done processing data
-     * @param data
+     * @param {function} done Callback call this call back when done processing data
+     * @param {json} data
+     * @method WC.ServiceLocationsView#_handleData
      * @private
      */
     fn._handleData = function (done, data) {
@@ -196,6 +224,7 @@
 
     /**
      * Callback Shows loading display
+     * @method WC.ServiceLocationsView#_loading
      * @private
      */
     fn._loading = function () {
@@ -211,6 +240,7 @@
 
     /**
      * Callback Used when an ajax error occurred or empty array came back from the server, displays no data message
+     * @method WC.ServiceLocationsView#_noData
      * @private
      */
     fn._noData = function () {
@@ -224,6 +254,7 @@
 
     /**
      * Callback after first on page, this callback is only ran once used to setup the paging buttons
+     * @method WC.ServiceLocationsView#_firstRun
      * @private
      */
     fn._firstRun = function () {
@@ -254,6 +285,7 @@
     /**
      * Handles hover event for each record
      * @param event
+     * @method WC.ServiceLocationsView#_onHover
      * @private
      */
     fn._onHover = function (event) {
@@ -277,6 +309,7 @@
 
     /**
      * Handles mouse out event for each record
+     * @method WC.ServiceLocationsView#_onMouseLeave
      * @private
      */
     fn._onMouseLeave = function () {
@@ -287,6 +320,7 @@
     /**
      * Updates the pager buttons based on current page, optional param used to overwrite settings
      * @param [pagerControls]
+     * @method WC.ServiceLocationsView#_updatePagerButtons
      * @private
      */
     fn._updatePagerButtons = function (pagerControls) {
@@ -305,6 +339,7 @@
     /**
      * Adds active class to record
      * @param serviceLocation
+     * @method WC.ServiceLocationsView#_markerMouseEnter
      * @private
      */
     fn._markerMouseEnter = function (serviceLocation) {
@@ -314,46 +349,71 @@
     /**
      * Removes active from record
      * @param serviceLocation
+     * @method WC.ServiceLocationsView#_markerMouseLeave
      * @private
      */
     fn._markerMouseLeave = function (serviceLocation) {
         this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
     };
 
-    if (!window.hasOwnProperty('WC')) {
-        window.WC = {};
-    }
-
     window.WC.ServiceLocationsView = ServiceLocationsView;
-
+    
+    /**
+     * The jQuery namespace
+     * @namespace jQuery
+     */
+    
+    /** 
+     * Alias to jQuery's Global Namespace
+     * @function WCServiceLocationsView 
+     * @param {object} options {@link WC.ServiceLocationsView}
+     * @memberOf jQuery
+     **/
     $.WCServiceLocationsView = ServiceLocationsView;
 
     /**
-     * Basic Object factory
-     * @param options
+     * Basic Object factory Helper
+     * @param {object} options {@link WC.ServiceLocationsView}
+     * @returns {@link WC.ServiceLocationsView}
+     * @function WCServiceLocationsView.create
+     * @memberOf jQuery
+     * @public
      */
-    $.WCServiceLocationsView.create = function(options){
+    $.WCServiceLocationsView.create = function (options) {
         var id = elemId($(options.container));
+        var obj;
         //only instantiate once
-        if(!ObjectCache.hasOwnProperty(id)){
-            ObjectCache[id] = new ServiceLocationsView(options);
+        if (!ObjectCache.hasOwnProperty(id)) {
+            obj = ObjectCache[id] = new ServiceLocationsView(options);
+        } else {
+            obj = ObjectCache[id];
         }
+        return obj;
     };
 
     /**
      * jQuery plugin for the ServicesLocationView Class
-     * @param options
-     * @returns {*}
-     * @constructor
+     * @param {object|string} options {@link WC.ServiceLocationsView}     
+     *  'first'
+     *  'last'
+     *  'next'
+     *  'back'
+     *  'totalPages'
+     *  'getCurrentPageData'
+     *  'currentPage'
+     * @returns {jQuery}
+     * @method fn.WCServiceLocationsView
+     * @memberOf jQuery
+     * @public
      */
     $.fn.WCServiceLocationsView = function (options) {
         var args = Array.prototype.slice.call(arguments, 1);
         var id = elemId($(this[0]));
         var ret;
-        if(ObjectCache.hasOwnProperty(id)){
+        if (ObjectCache.hasOwnProperty(id)) {
             var obj = ObjectCache[id];
 
-            switch(options){
+            switch (options) {
                 case 'first':
                 case 'last':
                 case 'next':
@@ -374,7 +434,7 @@
 
             return ret;
         }
-        return this.each(function(){
+        return this.each(function () {
             //clone options
             var opts = jQuery.extend({}, options);
             opts.container = $(this);
