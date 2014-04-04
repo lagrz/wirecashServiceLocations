@@ -4,7 +4,7 @@
     'use strict';
 
     /**
-     * Creates a google maps object, also decorates WC.ServiceLocation object(s) with various google objects.<br/>
+     * Creates a google maps object, also decorates ServiceLocation object(s) with various google objects.<br/>
      * For more information on the google maps api v3 refer to their docs page at:<br/>
      * {@link https://developers.google.com/maps/documentation/javascript/tutorial}
      * @param {object} options
@@ -24,6 +24,10 @@
         this._initGmaps();
     };
 
+    /**
+     * @property {object} prototype A simple shortcut to the GMaps prototype object
+     * @memberOf WC.GMaps
+     */
     var fn = GMaps.fn = GMaps.prototype;
 
     /**

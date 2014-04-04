@@ -126,7 +126,7 @@
     'use strict';
 
     /**
-     * Creates a google maps object, also decorates WC.ServiceLocation object(s) with various google objects.<br/>
+     * Creates a google maps object, also decorates ServiceLocation object(s) with various google objects.<br/>
      * For more information on the google maps api v3 refer to their docs page at:<br/>
      * {@link https://developers.google.com/maps/documentation/javascript/tutorial}
      * @param {object} options
@@ -146,6 +146,10 @@
         this._initGmaps();
     };
 
+    /**
+     * @property {object} prototype A simple shortcut to the GMaps prototype object
+     * @memberOf WC.GMaps
+     */
     var fn = GMaps.fn = GMaps.prototype;
 
     /**
@@ -328,23 +332,23 @@
      * @param {integer} [opts.show=15] The number of records to show per page
      * @param {string} opts.url The URL that we will be calling via ajax to grab the records
      * @param {object} opts.params An object used to add additional params for each request to the server
-     * @param {WC.Pager~onNoData} opts.onNoData
+     * @param {WC.Pager~onNoData} [opts.onNoData]
      * <p>Callback: When no data is returned from ajax call</p>
-     * @param {WC.Pager~onCreate} opts.onCreate
-     * <p>Callback: When the class is instantiated</p>
-     * @param {WC.Pager~onComplete} opts.onComplete
+     * @param {WC.Pager~onCreate} [opts.onCreate]
+     * <p>Callback: When the class is instantiated a</p>
+     * @param {WC.Pager~onComplete} [opts.onComplete]
      * <p>Callback: When the first page is done generating</p>
-     * @param {WC.Pager~onLoadingData} opts.onLoadingData
+     * @param {WC.Pager~onLoadingData} [opts.onLoadingData]
      * <p>Callback: When an ajax call is loading</p>
-     * @param {WC.Pager~onAjaxError} opts.onAjaxError
+     * @param {WC.Pager~onAjaxError} [opts.onAjaxError]
      * <p>Callback: When an ajax call returns an error status</p>
-     * @param {WC.Pager~onAjaxComplete} opts.onAjaxComplete
+     * @param {WC.Pager~onAjaxComplete} [opts.onAjaxComplete]
      * <p>Callback: When an ajax call is complete</p>
-     * @param {WC.Pager~onAjaxSuccess} opts.onAjaxSuccess
+     * @param {WC.Pager~onAjaxSuccess} [opts.onAjaxSuccess]
      * <p>Callback: When an ajax call is successfull</p>
-     * @param {WC.Pager~onBeforePage} opts.onBeforePage
+     * @param {WC.Pager~onBeforePage} [opts.onBeforePage]
      * <p>Callback: Before making an ajax request or grabbing the data for a page</p>
-     * @param {WC.Pager~onPage} opts.onPage
+     * @param {WC.Pager~onPage} [opts.onPage]
      * <p>Callback: When a page request was made</p>
      * @memberOf WC
      */

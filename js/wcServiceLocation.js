@@ -6,7 +6,17 @@
      * Basic Object with setter and getter representing base data for ServiceLocation also contains the objects for
      * google maps api.
      * @constructor
-     * @param {object} data
+     * @param {object} data Base data
+     * @param data.address Address
+     * @param data.agentCode Code
+     * @param data.lat Latitude
+     * @param data.lng Longitude
+     * @param data.country Country code
+     * @param data.currency Currency (USD, MXN)
+     * @param data.distance Distance in Miles
+     * @param data.hours Location hours
+     * @param data.name Location Name
+     * @param data.phone Phone number
      * @memberOf WC
      */
     var ServiceLocation = function (data) {
@@ -36,8 +46,9 @@
 
     /**
      * Gets specified data
-     * @param key
+     * @param {string} key Name of the property
      * @returns {*}
+     * @method WC.ServiceLocation#get
      */
     fn.get = function (key) {
         if (this.data.hasOwnProperty(key)) {
@@ -48,8 +59,9 @@
 
     /**
      * Sets specified data
-     * @param key
-     * @param val
+     * @param {string} key Name of the property
+     * @param {*} val Value to be stored
+     * @method WC.ServiceLocation#set
      */
     fn.set = function (key, val) {
         this.data[key] = val;
@@ -58,6 +70,7 @@
     /**
      * Returns an object without excluded items
      * @returns {object}
+     * @method WC.ServiceLocation#toJSON
      */
     fn.toJSON = function () {
         var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];

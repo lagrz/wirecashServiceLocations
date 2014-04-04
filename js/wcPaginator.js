@@ -5,27 +5,40 @@
      * Paginator class.
      * @constructor
      * @param {object} opts Options to initialize the class with
+     *
      * @param {integer} [opts.show=15] The number of records to show per page
+     *
      * @param {string} opts.url The URL that we will be calling via ajax to grab the records
+     *
      * @param {object} opts.params An object used to add additional params for each request to the server
-     * @param {WC.Pager~onNoData} opts.onNoData
-     * <p>Callback: When no data is returned from ajax call</p>
-     * @param {WC.Pager~onCreate} opts.onCreate
-     * <p>Callback: When the class is instantiated</p>
-     * @param {WC.Pager~onComplete} opts.onComplete
-     * <p>Callback: When the first page is done generating</p>
-     * @param {WC.Pager~onLoadingData} opts.onLoadingData
-     * <p>Callback: When an ajax call is loading</p>
-     * @param {WC.Pager~onAjaxError} opts.onAjaxError
-     * <p>Callback: When an ajax call returns an error status</p>
-     * @param {WC.Pager~onAjaxComplete} opts.onAjaxComplete
-     * <p>Callback: When an ajax call is complete</p>
-     * @param {WC.Pager~onAjaxSuccess} opts.onAjaxSuccess
-     * <p>Callback: When an ajax call is successfull</p>
-     * @param {WC.Pager~onBeforePage} opts.onBeforePage
-     * <p>Callback: Before making an ajax request or grabbing the data for a page</p>
-     * @param {WC.Pager~onPage} opts.onPage
-     * <p>Callback: When a page request was made</p>
+     *
+     * @param {WC.Pager~onNoData} [opts.onNoData=jQuery.noop]
+     * Callback: When no data is returned from ajax call
+     *
+     * @param {WC.Pager~onCreate} [opts.onCreate=jQuery.noop]
+     * Callback: When the class is instantiated
+     *
+     * @param {WC.Pager~onComplete} [opts.onComplete=jQuery.noop]
+     * Callback: When the first page is done generating
+     *
+     * @param {WC.Pager~onLoadingData} [opts.onLoadingData=jQuery.noop]
+     * Callback: When an ajax call is loading
+     *
+     * @param {WC.Pager~onAjaxError} [opts.onAjaxError=jQuery.noop]
+     * Callback: When an ajax call returns an error status
+     *
+     * @param {WC.Pager~onAjaxComplete} [opts.onAjaxComplete=jQuery.noop]
+     * Callback: When an ajax call is complete
+     *
+     * @param {WC.Pager~onAjaxSuccess} [opts.onAjaxSuccess=jQuery.noop]
+     * Callback: When an ajax call is successfull
+     *
+     * @param {WC.Pager~onBeforePage} [opts.onBeforePage=jQuery.noop]
+     * Callback: Before making an ajax request or grabbing the data for a page
+     *
+     * @param {WC.Pager~onPage} [opts.onPage=jQuery.noop]
+     * Callback: When a page request was made
+     *
      * @memberOf WC
      */
     var Pager = function (opts) {
@@ -59,19 +72,17 @@
             this.getData(0);
         }
     };
-
+    // Document the callbacks
     /**
      * Callback done when no data came back from the ajax call
      * @callback WC.Pager~onNoData
      * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
      */
-
     /**
      * Callback done when the class is instantiated
      * @callback WC.Pager~onCreate
      * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
      */
-
     /**
      * Callback when first page is created
      * @callback WC.Pager~onComplete
@@ -79,22 +90,18 @@
      * @param {object} json Json data returned
      * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
      */
-
     /**
      * Callback when the ajax call is loading
      * @callback WC.Pager~onLoadingData
      */
-
     /**
      * Callback when the ajax call returned an error
      * @callback WC.Pager~onAjaxError
      */
-
     /**
      * Callback done when ajax call is done
      * @callback WC.Pager~onAjaxComplete
      */
-
     /**
      * Callback when ajax call successfully obtained data from the server side. Provides a callback to first param that
      * needs to be ran with an array param containing that page's data. Used for normalizing the data.
@@ -102,14 +109,12 @@
      * @param {WC.Pager#ajaxSuccessCallback} done This callback needs to be called with the normalized data
      * @param {object} json Json data to be normalized
      */
-
     /**
      * Callback done before changing pages provides current page's data. Mostly used for processing stuff on before
      * changing to another page.
      * @callback WC.Pager~onBeforePage
      * @param {array} currentPageData Current page data
      */
-
     /**
      * Callback done to create the current page. Accepts an array with the data for the new page, and the pager object.
      * @callback WC.Pager~onPage
