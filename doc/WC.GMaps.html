@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: GMaps</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: GMaps</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+        <span class="ancestors"><a href="WC.html">WC</a>.</span>
+    
+    GMaps
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="GMaps"><span class="type-signature"></span>new GMaps<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a google maps object, also decorates WC.ServiceLocation object(s) with various google objects.<br/>For more information on the google maps api v3 refer to their docs page at:<br/><a href="https://developers.google.com/maps/documentation/javascript/tutorial">https://developers.google.com/maps/documentation/javascript/tutorial</a>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jQuery.html">jQuery</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The jQuery container object</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>mapsOptions</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Additional google maps options to be passed through</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="center"><span class="type-signature"></span>center<span class="signature">(serviceLocation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Centers the viewport of the map based on the provided servicelocation(s)
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Service Location Object</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line169">line 169</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="createMarker"><span class="type-signature"></span>createMarker<span class="signature">(serviceLocation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates the google maps marker and sets it on to the WC.ServiceLocation object
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Service Location Object</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line102">line 102</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="createMarkerEvents"><span class="type-signature"></span>createMarkerEvents<span class="signature">(serviceLocation, callbackOver, callbackOut, context)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates Hover mouse event for markers
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Service Location Object</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callbackOver</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Callback function to handle the Mouse Over event</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callbackOut</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Callback function to handle the Mouse Out event</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Context to be used on the callback functions</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="geoCodeAddress"><span class="type-signature"></span>geoCodeAddress<span class="signature">(serviceLocation, callback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Geocodes an address to latln format
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">An object containing lat lng keys or an array containing the various address sections</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Argument given to callback is either false if failed or an object with latlng key and normalized address key</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="hideMarker"><span class="type-signature"></span>hideMarker<span class="signature">(serviceLocation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Hides a marker(s)
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Service Location Object</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line160">line 160</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setLatLng"><span class="type-signature"></span>setLatLng<span class="signature">(serviceLocation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets a Google LatLng object to WC.ServiceLocation object
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Service Location Object</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="showMarker"><span class="type-signature"></span>showMarker<span class="signature">(serviceLocation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Shows a marker(s)
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>serviceLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WC.ServiceLocation.html">WC.ServiceLocation</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Service Location Object</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcGMaps.js.html">wcGMaps.js</a>, <a href="wcGMaps.js.html#line151">line 151</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="WC.GMaps.html">GMaps</a></li><li><a href="WC.Pager.html">Pager</a></li><li><a href="WC.ServiceLocation.html">ServiceLocation</a></li><li><a href="WC.ServiceLocationsView.html">ServiceLocationsView</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="WC.html">WC</a></li><li><a href="WC.GmapsAPILoader.html">GmapsAPILoader</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Apr 04 2014 15:38:16 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

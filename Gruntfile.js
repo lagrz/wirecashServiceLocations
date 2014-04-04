@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         },
         uglify: {
             options: {
-                sourceMap: true,
+                sourceMap: false,
                 preserveComments: false,
                 mangle: false,
                 report: 'min'
@@ -62,9 +62,10 @@ module.exports = function (grunt) {
         },
         jsdoc : {
             dist : {
-                src: ['js/*.js'], 
+                src: ['js/*.js','DOC.md'],
                 options: {
-                    destination: 'doc'
+                    destination: 'doc',
+                    'private': false
                 }
             }
         }

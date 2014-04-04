@@ -1,6 +1,13 @@
 (function (window, $) {
     'use strict';
 
+    /**
+     * Super tiny and super simple template engine
+     * @param {string} tpl The template string to be used. Template keys require encapsulation: {key}
+     * @param {object} d The data object used for the template.
+     * @returns {string} Result from combining the data with the template
+     * @memberOf WC
+     */
     function template(tpl, d) {
         for (var p in d) {
             //ensure no prototype keys are used
@@ -11,6 +18,12 @@
         return tpl;
     }
 
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.template = template;
+
     $.WCTemplate = template;
 
 })(this, this.jQuery);
@@ -19,11 +32,19 @@
 (function (window, $, google) {
     'use strict';
 
-    var WCGmapsAPILoader = {
+    /**
+     * Group of method helpers for dynamically loading the google maps api
+     * @namespace
+     * @memberOf WC
+     */
+    var GmapsAPILoader = {
         /**
          * Dynamically loads the google maps api options:
          * key: maps api key, sensor: use sensor, gmapsLoaded: callback when done loading
-         * @param options
+         * @param {object} options
+         * @param {string} options.key Google Maps Api key
+         * @param {boolean} options.sensor Use mobile sensor
+         * @param {function} options.gmapsLoaded Callback when the api is loaded
          */
         init: function (options) {
             options = $.extend({
@@ -36,7 +57,7 @@
         },
         /**
          * Creates a callback in the global scope removes it after
-         * @param options
+         * @param {object} options
          * @returns {string}
          */
         buildGlobalCallback: function (options) {
@@ -51,8 +72,8 @@
         },
         /**
          * Creates the url string with api key
-         * @param cb
-         * @param options
+         * @param {function} cb
+         * @param {object} options
          * @returns {string}
          */
         buildUrl: function (cb, options) {
@@ -69,7 +90,7 @@
         },
         /**
          * Dynamically loads the google maps api js file
-         * @param options
+         * @param {object} options
          */
         loadGmaps: function (options) {
             if (!google && options.key.length !== 0) {
@@ -89,7 +110,13 @@
         }
     };
 
-    $.WCGmapsAPILoader = WCGmapsAPILoader;
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.GmapsAPILoader = GmapsAPILoader;
+
+    $.WCGmapsAPILoader = GmapsAPILoader;
 
 })(this, this.jQuery, this.google);
 
@@ -99,9 +126,14 @@
     'use strict';
 
     /**
-     * Creates a google maps deal
-     * @param options
+     * Creates a google maps object, also decorates WC.ServiceLocation object(s) with various google objects.<br/>
+     * For more information on the google maps api v3 refer to their docs page at:<br/>
+     * {@link https://developers.google.com/maps/documentation/javascript/tutorial}
+     * @param {object} options
+     * @param {jQuery} options.container The jQuery container object
+     * @param {object} options.mapsOptions Additional google maps options to be passed through
      * @constructor
+     * @memberOf WC
      */
     var GMaps = function (options) {
         this.options = $.extend({}, {
@@ -118,8 +150,9 @@
 
     /**
      * Ensures given object is an array by checking or placing it in one
-     * @param obj
-     * @returns {*}
+     * @param {*} obj
+     * @returns {array}
+     * @method WC.GMaps#_ensureList
      * @private
      */
     fn._ensureList = function (obj) {
@@ -131,6 +164,7 @@
 
     /**
      * Instantiates certain google maps services
+     * @method WC.GMaps#_initGmaps
      * @private
      */
     fn._initGmaps = function () {
@@ -146,8 +180,9 @@
 
     /**
      * Geocodes an address to latln format
-     * @param serviceLocation An object containing lat lng keys or an array containing the various address sections
-     * @param callback Argument given to callback is either false if failed or an object with latlng key and normalized address key
+     * @param {WC.ServiceLocation} serviceLocation An object containing lat lng keys or an array containing the various address sections
+     * @param {function} callback Argument given to callback is either false if failed or an object with latlng key and normalized address key
+     * @method WC.GMaps#geoCodeAddress
      */
     fn.geoCodeAddress = function (serviceLocation, callback) {
         var addressRequest = {};
@@ -175,8 +210,9 @@
         });
     };
     /**
-     * Sets a Google LatLng object to ServiceLocation object
-     * @param serviceLocation
+     * Sets a Google LatLng object to WC.ServiceLocation object
+     * @param {WC.ServiceLocation} serviceLocation Service Location Object
+     * @method WC.GMaps#setLatLng
      */
     fn.setLatLng = function (serviceLocation) {
         if (serviceLocation.get('lat') !== 0) {
@@ -186,8 +222,9 @@
     };
 
     /**
-     * Creates the google maps marker
-     * @param serviceLocation
+     * Creates the google maps marker and sets it on to the WC.ServiceLocation object
+     * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
+     * @method WC.GMaps#createMarker
      */
     fn.createMarker = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
@@ -203,10 +240,11 @@
 
     /**
      * Creates Hover mouse event for markers
-     * @param serviceLocation
-     * @param callbackOver
-     * @param callbackOut
-     * @param context
+     * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
+     * @param {function} callbackOver Callback function to handle the Mouse Over event
+     * @param {function} callbackOut Callback function to handle the Mouse Out event
+     * @param {object} context Context to be used on the callback functions
+     * @method WC.GMaps#createMarkerEvents
      */
     fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
         serviceLocation = this._ensureList(serviceLocation);
@@ -219,8 +257,8 @@
 
     /**
      * Toggles a marker
-     * @param serviceLocation
-     * @param [map]
+     * @param {WC.ServiceLocation} serviceLocation Service Location Object
+     * @param [map] optional param what google map object to toggle the marker in
      * @private
      */
     fn._toggleMarker = function (serviceLocation, map) {
@@ -233,16 +271,18 @@
     };
 
     /**
-     * Shows a marker
-     * @param serviceLocation
+     * Shows a marker(s)
+     * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
+     * @method WC.GMaps#showMarker
      */
     fn.showMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation, this.map);
     };
 
     /**
-     * Hides a marker
-     * @param serviceLocation
+     * Hides a marker(s)
+     * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
+     * @method WC.GMaps#hideMarker
      */
     fn.hideMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation);
@@ -250,7 +290,8 @@
 
     /**
      * Centers the viewport of the map based on the provided servicelocation(s)
-     * @param serviceLocation
+     * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
+     * @method WC.GMaps#center
      */
     fn.center = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
@@ -267,17 +308,47 @@
         }
     };
 
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.GMaps = GMaps;
+
     $.WCGmaps = GMaps;
+
 })(this, this.jQuery);
 
 (function (win, $) {
     'use strict';
 
     /**
-     * Paginator class
-     * @type {WCPaginator}
+     * Paginator class.
+     * @constructor
+     * @param {object} opts Options to initialize the class with
+     * @param {integer} [opts.show=15] The number of records to show per page
+     * @param {string} opts.url The URL that we will be calling via ajax to grab the records
+     * @param {object} opts.params An object used to add additional params for each request to the server
+     * @param {WC.Pager~onNoData} opts.onNoData
+     * <p>Callback: When no data is returned from ajax call</p>
+     * @param {WC.Pager~onCreate} opts.onCreate
+     * <p>Callback: When the class is instantiated</p>
+     * @param {WC.Pager~onComplete} opts.onComplete
+     * <p>Callback: When the first page is done generating</p>
+     * @param {WC.Pager~onLoadingData} opts.onLoadingData
+     * <p>Callback: When an ajax call is loading</p>
+     * @param {WC.Pager~onAjaxError} opts.onAjaxError
+     * <p>Callback: When an ajax call returns an error status</p>
+     * @param {WC.Pager~onAjaxComplete} opts.onAjaxComplete
+     * <p>Callback: When an ajax call is complete</p>
+     * @param {WC.Pager~onAjaxSuccess} opts.onAjaxSuccess
+     * <p>Callback: When an ajax call is successfull</p>
+     * @param {WC.Pager~onBeforePage} opts.onBeforePage
+     * <p>Callback: Before making an ajax request or grabbing the data for a page</p>
+     * @param {WC.Pager~onPage} opts.onPage
+     * <p>Callback: When a page request was made</p>
+     * @memberOf WC
      */
-    var Pager = $.WCPaginator = function (opts) {
+    var Pager = function (opts) {
         //extend default settings
         this.recs = $.extend({}, {
             show: 15,
@@ -309,27 +380,88 @@
         }
     };
 
+    /**
+     * Callback done when no data came back from the ajax call
+     * @callback WC.Pager~onNoData
+     * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
+     */
+
+    /**
+     * Callback done when the class is instantiated
+     * @callback WC.Pager~onCreate
+     * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
+     */
+
+    /**
+     * Callback when first page is created
+     * @callback WC.Pager~onComplete
+     * @param {array} currentPage Current page data
+     * @param {object} json Json data returned
+     * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
+     */
+
+    /**
+     * Callback when the ajax call is loading
+     * @callback WC.Pager~onLoadingData
+     */
+
+    /**
+     * Callback when the ajax call returned an error
+     * @callback WC.Pager~onAjaxError
+     */
+
+    /**
+     * Callback done when ajax call is done
+     * @callback WC.Pager~onAjaxComplete
+     */
+
+    /**
+     * Callback when ajax call successfully obtained data from the server side. Provides a callback to first param that
+     * needs to be ran with an array param containing that page's data. Used for normalizing the data.
+     * @callback WC.Pager~onAjaxSuccess
+     * @param {WC.Pager#ajaxSuccessCallback} done This callback needs to be called with the normalized data
+     * @param {object} json Json data to be normalized
+     */
+
+    /**
+     * Callback done before changing pages provides current page's data. Mostly used for processing stuff on before
+     * changing to another page.
+     * @callback WC.Pager~onBeforePage
+     * @param {array} currentPageData Current page data
+     */
+
+    /**
+     * Callback done to create the current page. Accepts an array with the data for the new page, and the pager object.
+     * @callback WC.Pager~onPage
+     * @param {array} currentPage Current page data
+     * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
+     */
+
+    /**
+     * @property {object} prototype A simple shortcut to the Pager prototype object
+     * @memberOf WC.Pager
+     */
     var fn = Pager.fn = Pager.prototype;
 
     /**
      * Returns the current page
-     * @returns {number|$.WCPaginator.recs.currPage}
+     * @returns {number}
      */
-    fn.getCurrentPage = function(){
+    fn.getCurrentPage = function () {
         return this.recs.currPage;
     };
 
     /**
      * Returns an array containing the data for the current page
-     * @returns {*}
+     * @returns {array}
      */
-    fn.getCurrentPageData = function(){
+    fn.getCurrentPageData = function () {
         return this.recs.data[this.recs.currPage];
     };
 
     /**
      * Calculates the total number of pages
-     * @returns {number|$.WCPaginator.recs.totalPages}
+     * @returns {number}
      */
     fn.totalPages = function () {
         //calculate the total amount of pages
@@ -365,8 +497,8 @@
     /**
      * Performs a callback before calling on page callback
      */
-    fn.beforePaging = function(){
-        if(this.recs.data[this.recs.currPage]){
+    fn.beforePaging = function () {
+        if (this.recs.data[this.recs.currPage]) {
             this.recs.onBeforePage(this.recs.data[this.recs.currPage]);
         }
     };
@@ -396,10 +528,10 @@
                 success: function () {
                     var args = Array.prototype.slice.call(arguments, 0);
                     //prepend our callback
-                    if(self.recs.onAjaxSuccess !== $.noop){
+                    if (self.recs.onAjaxSuccess !== $.noop) {
                         args.unshift(self.ajaxSuccessCallback);
                         self.recs.onAjaxSuccess.apply(null, args);
-                    }else{
+                    } else {
                         self.ajaxSuccessCallback(args[0]);
                     }
                 }
@@ -516,14 +648,22 @@
      * @param pageNo
      * @returns {Pager.fn}
      */
-    fn.page = function(pageNo){
+    fn.page = function (pageNo) {
         this.beforePaging();
-        if(pageNo < this.recs.totalPages && pageNo >= 0){
+        if (pageNo < this.recs.totalPages && pageNo >= 0) {
             this.recs.currPage = pageNo;
             this.getData(pageNo);
         }
         return this;
     };
+
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.Pager = Pager;
+
+    $.WCPaginator = Pager;
 
 })(this, this.jQuery);
 
@@ -532,11 +672,13 @@
     'use strict';
 
     /**
-     * Basic Object with setter and getter representing base data for ServiceLocation
-     * @param data
+     * Basic Object with setter and getter representing base data for ServiceLocation also contains the objects for
+     * google maps api.
      * @constructor
+     * @param {object} data
+     * @memberOf WC
      */
-    var WCServiceLocation = function (data) {
+    var ServiceLocation = function (data) {
         this.data = $.extend({
             address: null,
             agentCode: null,
@@ -555,7 +697,11 @@
         }, data || {});
     };
 
-    var fn = WCServiceLocation.fn = WCServiceLocation.prototype;
+    /**
+     * @property {object} prototype A simple shortcut to the ServiceLocation prototype object
+     * @memberOf WC.ServiceLocation
+     */
+    var fn = ServiceLocation.fn = ServiceLocation.prototype;
 
     /**
      * Gets specified data
@@ -580,7 +726,7 @@
 
     /**
      * Returns an object without excluded items
-     * @returns {*}
+     * @returns {object}
      */
     fn.toJSON = function () {
         var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
@@ -591,19 +737,35 @@
         return clone;
     };
 
-    $.WCServiceLocation = WCServiceLocation;
+    if (!window.hasOwnProperty('WC')) {
+        window.WC = {};
+    }
+
+    window.WC.ServiceLocation = ServiceLocation;
+
+    $.WCServiceLocation = ServiceLocation;
+
 })(this, this.jQuery, this.google);
 
 (function (window, $, google) {
     'use strict';
 
+    if (!window.hasOwnProperty('WC')) {
+        /**
+         * Global Namespace for all classes related to Wirecash.
+         * @namespace WC
+         */
+        window.WC = {};
+    }
+
     var elemIdCounter = 0;
     var ObjectCache = {};
 
     /**
-     * Grabs the element id and returns it otherwise it will identify it
-     * @param $elem
-     * @returns {*}
+     * Grabs the element id, and returns it otherwise it will identify it by using a prefix 'anonymous_element_' and a digit (ex: anonymous_element_22)
+     * @param {jQuery} $elem Element to be identified
+     * @returns {string} Identity of the Element
+     * @memberOf WC
      */
     function elemId($elem) {
         var id = $elem.attr('id');
@@ -617,15 +779,97 @@
         return id;
     }
 
-    //tplMain MUST CONTAIN ELEMENTS WITH these CLASSES:
-    //      - wc-first-page, wc-last-page, wc-page-next, wc-page-back
-    //      - wc-map-container
-    //      - wc-content-container
+    window.WC.elemId = elemId;
 
     /**
      * Main Class for the Services Locations widget
-     * @param options
      * @constructor
+     * @param {object} options Options to initialize the class with
+     *
+     * @param {jQuery} options.container
+     * <p>The main container element must be a valid jQuery object, if using the jQuery plugin pattern you can omit this</p>
+     *
+     * @param {string} options.tplMain
+     * <p>The main container template, can be either string or a valid html / jQuery element.</p>
+     * <p>It MUST contain at least an element with the following:</p>
+     * <ul>
+     * <li>Whatever class defined for option 'mapContainer', default: '.wc-map-container'</li>
+     * <li>Whatever class defined for option 'contentContainer', default: '.wc-content-container'</li>
+     * </ul>
+     * <p>The following are optional, but required for pagination:</p>
+     * <ul>
+     * <li>- Whatever class defined for option 'pageFirst', default: '.wc-first-page'</li>
+     * <li>- Whatever class defined for option 'pageLast', default: '.wc-last-page'</li>
+     * <li>- Whatever class defined for option 'pageNext', default: '.wc-page-next'</li>
+     * <li>- Whatever class defined for option 'pageBack', default: '.wc-page-back'</li>
+     * </ul>
+     *
+     * @param {string} options.tplLocation
+     * <p>The template that generates each location record, must be a string</p>
+     * <p>Can have any of the following keys:</p>
+     * <ul>
+     *     <li>{address}</li>
+     *     <li>{agentCode}</li>
+     *     <li>{lat}</li>
+     *     <li>{lng}</li>
+     *     <li>{country}</li>
+     *     <li>{currency}</li>
+     *     <li>{distance}</li>
+     *     <li>{hours}</li>
+     *     <li>{name}</li>
+     *     <li>{phone}</li>
+     * </ul>
+     *
+     * @param {string | element | jQuery} options.tplNoData
+     * <p>The template that is displayed in case no data is returned from the server or
+     * an ajax error occurred, can be string / html / jQuery</p>
+     *
+     * @param {string | element | jQuery} options.tplLoading
+     * <p>The template that is displayed while the ajax call is running, can be string / html / jQuery </p>
+     *
+     * @param {integer} [options.pagerShowPerPage=5]
+     * <p>The number of records to show per page, must be a number</p>
+     *
+     * @param {integer} options.pagerTotalRecords
+     * <p>The total number of records available, must be a number</p>
+     *
+     * @param {string} options.pagerRecordsUrl
+     * <p>The URL that we will be calling via ajax to grab the records</p>
+     *
+     * @param {object} options.pagerRecordsParams
+     * <p>An object used to add additional params for each request to the server</p>
+     *
+     * @param {string} options.mapsAPIKey
+     * <p>The google maps API key</p>
+     *
+     * @param {string} [options.pageFirst='.wc-first-page']
+     * <p>Specify the selector for the paginator first page button</p>
+     *
+     * @param {string} [options.pageLast='.wc-last-page']
+     * <p>Specify the selector for the paginator last page button</p>
+     *
+     * @param {string} [options.pageNext='.wc-page-next']
+     * <p>The selector for the paginator for the next page button</p>
+     *
+     * @param {string} [options.pageBack='.wc-page-back']
+     * <p>The selector for the paginator for the back page button</p>
+     *
+     * @param {string} [options.mapContainer='.wc-map-container']
+     * <p>The selector for the Google maps canvas container</p>
+     *
+     * @param {string} [options.contentContainer='.wc-content-container']
+     * <p>The selector for service locations container</p>
+     *
+     * @param {string} [options.pageEnable='wc-enable']
+     * <p>A css class that is added when a paginator button is enabled</p>
+     *
+     * @param {string} [options.pageDisable='wc-disable']
+     * <p>A css class that is added when a paginator button is disabled</p>
+     *
+     * @param {string} [options.recordActive='wc-active']
+     * <p>A css class that is toggled when a map marker gets a mouseover / mouseout event</p>
+     *
+     * @memberOf WC
      */
     var ServiceLocationsView = function (options) {
         this.options = $.extend({
@@ -681,10 +925,16 @@
         }
     };
 
+    /**
+     * @property {object} prototype A simple shortcut to the ServiceLocationsView prototype object
+     * @memberOf WC.ServiceLocationsView
+     */
     var fn = ServiceLocationsView.fn = ServiceLocationsView.prototype;
 
     /**
      * Instantiates our pager object with various callback settings ran after we have google object in the global scope
+     * @method WC.ServiceLocationsView#init
+     * @private
      */
     fn.init = function () {
         //create the pager and its callbacks
@@ -733,7 +983,8 @@
 
     /**
      * Callback ran before running a page, used to hide the current markers
-     * @param serviceLocations
+     * @param {array} serviceLocations
+     * @method WC.ServiceLocationsView#_beforePage
      * @private
      */
     fn._beforePage = function (serviceLocations) {
@@ -743,7 +994,8 @@
 
     /**
      * Callback ran everytime a user changes page, paints template objects to UI, updates pager buttons, adds/shows markers
-     * @param serviceLocations
+     * @param {array} serviceLocations
+     * @method WC.ServiceLocationsView#_showPage
      * @private
      */
     fn._showPage = function (serviceLocations) {
@@ -767,8 +1019,9 @@
 
     /**
      * Callback performed everytime pager gets data from ajax. Used to perform preprocessing of data (conversion to objects)
-     * @param done Callback call this call back when done processing data
-     * @param data
+     * @param {function} done Callback call this call back when done processing data
+     * @param {json} data
+     * @method WC.ServiceLocationsView#_handleData
      * @private
      */
     fn._handleData = function (done, data) {
@@ -792,6 +1045,7 @@
 
     /**
      * Callback Shows loading display
+     * @method WC.ServiceLocationsView#_loading
      * @private
      */
     fn._loading = function () {
@@ -807,6 +1061,7 @@
 
     /**
      * Callback Used when an ajax error occurred or empty array came back from the server, displays no data message
+     * @method WC.ServiceLocationsView#_noData
      * @private
      */
     fn._noData = function () {
@@ -820,6 +1075,7 @@
 
     /**
      * Callback after first on page, this callback is only ran once used to setup the paging buttons
+     * @method WC.ServiceLocationsView#_firstRun
      * @private
      */
     fn._firstRun = function () {
@@ -850,6 +1106,7 @@
     /**
      * Handles hover event for each record
      * @param event
+     * @method WC.ServiceLocationsView#_onHover
      * @private
      */
     fn._onHover = function (event) {
@@ -873,6 +1130,7 @@
 
     /**
      * Handles mouse out event for each record
+     * @method WC.ServiceLocationsView#_onMouseLeave
      * @private
      */
     fn._onMouseLeave = function () {
@@ -883,6 +1141,7 @@
     /**
      * Updates the pager buttons based on current page, optional param used to overwrite settings
      * @param [pagerControls]
+     * @method WC.ServiceLocationsView#_updatePagerButtons
      * @private
      */
     fn._updatePagerButtons = function (pagerControls) {
@@ -901,6 +1160,7 @@
     /**
      * Adds active class to record
      * @param serviceLocation
+     * @method WC.ServiceLocationsView#_markerMouseEnter
      * @private
      */
     fn._markerMouseEnter = function (serviceLocation) {
@@ -910,40 +1170,76 @@
     /**
      * Removes active from record
      * @param serviceLocation
+     * @method WC.ServiceLocationsView#_markerMouseLeave
      * @private
      */
     fn._markerMouseLeave = function (serviceLocation) {
         this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
     };
 
+    window.WC.ServiceLocationsView = ServiceLocationsView;
+
+    /**
+     * <p>The jQuery namespace, also known as the global `$` variable.</p>
+     * <p>Visit the jQuery website for more information: {@link http://jquery.com/}</p>
+     * @namespace jQuery
+     */
+
+    /**
+     * Alias to jQuery's Global Namespace
+     * @function WCServiceLocationsView
+     * @param {object} options {@link WC.ServiceLocationsView}
+     * @memberOf jQuery
+     * @public
+     **/
     $.WCServiceLocationsView = ServiceLocationsView;
 
     /**
-     * Basic Object factory
-     * @param options
+     * Basic Object factory Helper
+     * @param {object} options {@link WC.ServiceLocationsView}
+     * @returns {@link WC.ServiceLocationsView}
+     * @function WCServiceLocationsView.create
+     * @memberOf jQuery
+     * @public
      */
-    $.WCServiceLocationsView.create = function(options){
+    $.WCServiceLocationsView.create = function (options) {
         var id = elemId($(options.container));
+        var obj;
         //only instantiate once
-        if(!ObjectCache.hasOwnProperty(id)){
-            ObjectCache[id] = new ServiceLocationsView(options);
+        if (!ObjectCache.hasOwnProperty(id)) {
+            obj = ObjectCache[id] = new ServiceLocationsView(options);
+        } else {
+            obj = ObjectCache[id];
         }
+        return obj;
     };
 
     /**
      * jQuery plugin for the ServicesLocationView Class
-     * @param options
-     * @returns {*}
-     * @constructor
+     * @param {object|string} options {@link WC.ServiceLocationsView}
+     *  <p>Additionally the following Strings are valid parameters</p>
+     *  <ul>
+     *  <li>'first' - Moves to first page</li>
+     *  <li>'last' - Moves to last page</li>
+     *  <li>'next' - Moves to next page</li>
+     *  <li>'back' - Moves back a page</li>
+     *  <li>'totalPages' - Returns total number of pages</li>
+     *  <li>'getCurrentPageData' - returns an array containing the current page's data</li>
+     *  <li>'currentPage' - returns the current page number</li>
+     *  </ul>
+     * @returns {jQuery}
+     * @method fn.WCServiceLocationsView
+     * @memberOf jQuery
+     * @public
      */
     $.fn.WCServiceLocationsView = function (options) {
         var args = Array.prototype.slice.call(arguments, 1);
         var id = elemId($(this[0]));
         var ret;
-        if(ObjectCache.hasOwnProperty(id)){
+        if (ObjectCache.hasOwnProperty(id)) {
             var obj = ObjectCache[id];
 
-            switch(options){
+            switch (options) {
                 case 'first':
                 case 'last':
                 case 'next':
@@ -958,13 +1254,20 @@
                 case 'currentPage':
                     ret = obj.pager.getCurrentPage();
                     break;
+                case 'page':
+                    //only use the page command if an argument was given
+                    if (args.length) {
+                        obj.pager[options].apply(obj.pager, args);
+                        ret = obj;
+                    }
+                    break;
                 default:
                     ret = obj;
             }
 
             return ret;
         }
-        return this.each(function(){
+        return this.each(function () {
             //clone options
             var opts = jQuery.extend({}, options);
             opts.container = $(this);

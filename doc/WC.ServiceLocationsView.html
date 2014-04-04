@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: ServiceLocationsView</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: ServiceLocationsView</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+        <span class="ancestors"><a href="WC.html">WC</a>.</span>
+    
+    ServiceLocationsView
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="ServiceLocationsView"><span class="type-signature"></span>new ServiceLocationsView<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Main Class for the Services Locations widget
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Options to initialize the class with
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jQuery.html">jQuery</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The main container element must be a valid jQuery object, if using the jQuery plugin pattern you can omit this</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>tplMain</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The main container template, can be either string or a valid html / jQuery element.</p><p>It MUST contain at least an element with the following:</p><ul><li>Whatever class defined for option 'mapContainer', default: '.wc-map-container'</li><li>Whatever class defined for option 'contentContainer', default: '.wc-content-container'</li></ul><p>The following are optional, but required for pagination:</p><ul><li>- Whatever class defined for option 'pageFirst', default: '.wc-first-page'</li><li>- Whatever class defined for option 'pageLast', default: '.wc-last-page'</li><li>- Whatever class defined for option 'pageNext', default: '.wc-page-next'</li><li>- Whatever class defined for option 'pageBack', default: '.wc-page-back'</li></ul></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>tplLocation</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The template that generates each location record, must be a string</p><p>Can have any of the following keys:</p><ul>    <li>{address}</li>    <li>{agentCode}</li>    <li>{lat}</li>    <li>{lng}</li>    <li>{country}</li>    <li>{currency}</li>    <li>{distance}</li>    <li>{hours}</li>    <li>{name}</li>    <li>{phone}</li></ul></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>tplNoData</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">element</span>
+|
+
+<span class="param-type"><a href="jQuery.html">jQuery</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The template that is displayed in case no data is returned from the server oran ajax error occurred, can be string / html / jQuery</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>tplLoading</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">element</span>
+|
+
+<span class="param-type"><a href="jQuery.html">jQuery</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The template that is displayed while the ajax call is running, can be string / html / jQuery </p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pagerShowPerPage</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    5
+                
+                </td>
+            
+            
+            <td class="description last"><p>The number of records to show per page, must be a number</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pagerTotalRecords</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The total number of records available, must be a number</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pagerRecordsUrl</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The URL that we will be calling via ajax to grab the records</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pagerRecordsParams</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>An object used to add additional params for each request to the server</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>mapsAPIKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>The google maps API key</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pageFirst</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    '.wc-first-page'
+                
+                </td>
+            
+            
+            <td class="description last"><p>Specify the selector for the paginator first page button</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pageLast</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    '.wc-last-page'
+                
+                </td>
+            
+            
+            <td class="description last"><p>Specify the selector for the paginator last page button</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pageNext</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    '.wc-page-next'
+                
+                </td>
+            
+            
+            <td class="description last"><p>The selector for the paginator for the next page button</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pageBack</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    '.wc-page-back'
+                
+                </td>
+            
+            
+            <td class="description last"><p>The selector for the paginator for the back page button</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>mapContainer</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    '.wc-map-container'
+                
+                </td>
+            
+            
+            <td class="description last"><p>The selector for the Google maps canvas container</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>contentContainer</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    '.wc-content-container'
+                
+                </td>
+            
+            
+            <td class="description last"><p>The selector for service locations container</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pageEnable</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    'wc-enable'
+                
+                </td>
+            
+            
+            <td class="description last"><p>A css class that is added when a paginator button is enabled</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>pageDisable</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    'wc-disable'
+                
+                </td>
+            
+            
+            <td class="description last"><p>A css class that is added when a paginator button is disabled</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>recordActive</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    'wc-active'
+                
+                </td>
+            
+            
+            <td class="description last"><p>A css class that is toggled when a map marker gets a mouseover / mouseout event</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcServiceLocationsView.js.html">wcServiceLocationsView.js</a>, <a href="wcServiceLocationsView.js.html#line125">line 125</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="fn"><span class="type-signature">&lt;static> </span>fn<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    
+
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>prototype</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">A simple shortcut to the ServiceLocationsView prototype object</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wcServiceLocationsView.js.html">wcServiceLocationsView.js</a>, <a href="wcServiceLocationsView.js.html#line183">line 183</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="WC.GMaps.html">GMaps</a></li><li><a href="WC.Pager.html">Pager</a></li><li><a href="WC.ServiceLocation.html">ServiceLocation</a></li><li><a href="WC.ServiceLocationsView.html">ServiceLocationsView</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="WC.html">WC</a></li><li><a href="WC.GmapsAPILoader.html">GmapsAPILoader</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Apr 04 2014 15:38:16 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

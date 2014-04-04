@@ -1,4 +1,31 @@
-(function (window, $, google) {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: wcServiceLocationsView.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: wcServiceLocationsView.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function (window, $, google) {
     'use strict';
 
     if (!window.hasOwnProperty('WC')) {
@@ -38,87 +65,87 @@
      * @param {object} options Options to initialize the class with
      *
      * @param {jQuery} options.container
-     * <p>The main container element must be a valid jQuery object, if using the jQuery plugin pattern you can omit this</p>
+     * &lt;p>The main container element must be a valid jQuery object, if using the jQuery plugin pattern you can omit this&lt;/p>
      *
      * @param {string} options.tplMain
-     * <p>The main container template, can be either string or a valid html / jQuery element.</p>
-     * <p>It MUST contain at least an element with the following:</p>
-     * <ul>
-     * <li>Whatever class defined for option 'mapContainer', default: '.wc-map-container'</li>
-     * <li>Whatever class defined for option 'contentContainer', default: '.wc-content-container'</li>
-     * </ul>
-     * <p>The following are optional, but required for pagination:</p>
-     * <ul>
-     * <li>- Whatever class defined for option 'pageFirst', default: '.wc-first-page'</li>
-     * <li>- Whatever class defined for option 'pageLast', default: '.wc-last-page'</li>
-     * <li>- Whatever class defined for option 'pageNext', default: '.wc-page-next'</li>
-     * <li>- Whatever class defined for option 'pageBack', default: '.wc-page-back'</li>
-     * </ul>
+     * &lt;p>The main container template, can be either string or a valid html / jQuery element.&lt;/p>
+     * &lt;p>It MUST contain at least an element with the following:&lt;/p>
+     * &lt;ul>
+     * &lt;li>Whatever class defined for option 'mapContainer', default: '.wc-map-container'&lt;/li>
+     * &lt;li>Whatever class defined for option 'contentContainer', default: '.wc-content-container'&lt;/li>
+     * &lt;/ul>
+     * &lt;p>The following are optional, but required for pagination:&lt;/p>
+     * &lt;ul>
+     * &lt;li>- Whatever class defined for option 'pageFirst', default: '.wc-first-page'&lt;/li>
+     * &lt;li>- Whatever class defined for option 'pageLast', default: '.wc-last-page'&lt;/li>
+     * &lt;li>- Whatever class defined for option 'pageNext', default: '.wc-page-next'&lt;/li>
+     * &lt;li>- Whatever class defined for option 'pageBack', default: '.wc-page-back'&lt;/li>
+     * &lt;/ul>
      *
      * @param {string} options.tplLocation
-     * <p>The template that generates each location record, must be a string</p>
-     * <p>Can have any of the following keys:</p>
-     * <ul>
-     *     <li>{address}</li>
-     *     <li>{agentCode}</li>
-     *     <li>{lat}</li>
-     *     <li>{lng}</li>
-     *     <li>{country}</li>
-     *     <li>{currency}</li>
-     *     <li>{distance}</li>
-     *     <li>{hours}</li>
-     *     <li>{name}</li>
-     *     <li>{phone}</li>
-     * </ul>
+     * &lt;p>The template that generates each location record, must be a string&lt;/p>
+     * &lt;p>Can have any of the following keys:&lt;/p>
+     * &lt;ul>
+     *     &lt;li>{address}&lt;/li>
+     *     &lt;li>{agentCode}&lt;/li>
+     *     &lt;li>{lat}&lt;/li>
+     *     &lt;li>{lng}&lt;/li>
+     *     &lt;li>{country}&lt;/li>
+     *     &lt;li>{currency}&lt;/li>
+     *     &lt;li>{distance}&lt;/li>
+     *     &lt;li>{hours}&lt;/li>
+     *     &lt;li>{name}&lt;/li>
+     *     &lt;li>{phone}&lt;/li>
+     * &lt;/ul>
      *
      * @param {string | element | jQuery} options.tplNoData
-     * <p>The template that is displayed in case no data is returned from the server or
-     * an ajax error occurred, can be string / html / jQuery</p>
+     * &lt;p>The template that is displayed in case no data is returned from the server or
+     * an ajax error occurred, can be string / html / jQuery&lt;/p>
      *
      * @param {string | element | jQuery} options.tplLoading
-     * <p>The template that is displayed while the ajax call is running, can be string / html / jQuery </p>
+     * &lt;p>The template that is displayed while the ajax call is running, can be string / html / jQuery &lt;/p>
      *
      * @param {integer} [options.pagerShowPerPage=5]
-     * <p>The number of records to show per page, must be a number</p>
+     * &lt;p>The number of records to show per page, must be a number&lt;/p>
      *
      * @param {integer} options.pagerTotalRecords
-     * <p>The total number of records available, must be a number</p>
+     * &lt;p>The total number of records available, must be a number&lt;/p>
      *
      * @param {string} options.pagerRecordsUrl
-     * <p>The URL that we will be calling via ajax to grab the records</p>
+     * &lt;p>The URL that we will be calling via ajax to grab the records&lt;/p>
      *
      * @param {object} options.pagerRecordsParams
-     * <p>An object used to add additional params for each request to the server</p>
+     * &lt;p>An object used to add additional params for each request to the server&lt;/p>
      *
      * @param {string} options.mapsAPIKey
-     * <p>The google maps API key</p>
+     * &lt;p>The google maps API key&lt;/p>
      *
      * @param {string} [options.pageFirst='.wc-first-page']
-     * <p>Specify the selector for the paginator first page button</p>
+     * &lt;p>Specify the selector for the paginator first page button&lt;/p>
      *
      * @param {string} [options.pageLast='.wc-last-page']
-     * <p>Specify the selector for the paginator last page button</p>
+     * &lt;p>Specify the selector for the paginator last page button&lt;/p>
      *
      * @param {string} [options.pageNext='.wc-page-next']
-     * <p>The selector for the paginator for the next page button</p>
+     * &lt;p>The selector for the paginator for the next page button&lt;/p>
      *
      * @param {string} [options.pageBack='.wc-page-back']
-     * <p>The selector for the paginator for the back page button</p>
+     * &lt;p>The selector for the paginator for the back page button&lt;/p>
      *
      * @param {string} [options.mapContainer='.wc-map-container']
-     * <p>The selector for the Google maps canvas container</p>
+     * &lt;p>The selector for the Google maps canvas container&lt;/p>
      *
      * @param {string} [options.contentContainer='.wc-content-container']
-     * <p>The selector for service locations container</p>
+     * &lt;p>The selector for service locations container&lt;/p>
      *
      * @param {string} [options.pageEnable='wc-enable']
-     * <p>A css class that is added when a paginator button is enabled</p>
+     * &lt;p>A css class that is added when a paginator button is enabled&lt;/p>
      *
      * @param {string} [options.pageDisable='wc-disable']
-     * <p>A css class that is added when a paginator button is disabled</p>
+     * &lt;p>A css class that is added when a paginator button is disabled&lt;/p>
      *
      * @param {string} [options.recordActive='wc-active']
-     * <p>A css class that is toggled when a map marker gets a mouseover / mouseout event</p>
+     * &lt;p>A css class that is toggled when a map marker gets a mouseover / mouseout event&lt;/p>
      *
      * @memberOf WC
      */
@@ -251,7 +278,7 @@
      */
     fn._showPage = function (serviceLocations) {
         var content = '';
-        for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
+        for (var i = 0, s = serviceLocations.length, location; i &lt; s; i++) {
             location = serviceLocations[i];
             content += $.WCTemplate(this.options.tplLocation, location.toJSON());
         }
@@ -370,7 +397,7 @@
             var data = this.pager.getCurrentPageData();
             this.gmap.hideMarker(data);
             //find the one we have an id for and show it
-            for (var i = 0, s = data.length, location; i < s; i++) {
+            for (var i = 0, s = data.length, location; i &lt; s; i++) {
                 location = data[i];
                 if (location.get('agentCode') === id) {
                     this.gmap.showMarker(location);
@@ -431,8 +458,8 @@
     window.WC.ServiceLocationsView = ServiceLocationsView;
 
     /**
-     * <p>The jQuery namespace, also known as the global `$` variable.</p>
-     * <p>Visit the jQuery website for more information: {@link http://jquery.com/}</p>
+     * &lt;p>The jQuery namespace, also known as the global `$` variable.&lt;/p>
+     * &lt;p>Visit the jQuery website for more information: {@link http://jquery.com/}&lt;/p>
      * @namespace jQuery
      */
 
@@ -468,16 +495,16 @@
     /**
      * jQuery plugin for the ServicesLocationView Class
      * @param {object|string} options {@link WC.ServiceLocationsView}
-     *  <p>Additionally the following Strings are valid parameters</p>
-     *  <ul>
-     *  <li>'first' - Moves to first page</li>
-     *  <li>'last' - Moves to last page</li>
-     *  <li>'next' - Moves to next page</li>
-     *  <li>'back' - Moves back a page</li>
-     *  <li>'totalPages' - Returns total number of pages</li>
-     *  <li>'getCurrentPageData' - returns an array containing the current page's data</li>
-     *  <li>'currentPage' - returns the current page number</li>
-     *  </ul>
+     *  &lt;p>Additionally the following Strings are valid parameters&lt;/p>
+     *  &lt;ul>
+     *  &lt;li>'first' - Moves to first page&lt;/li>
+     *  &lt;li>'last' - Moves to last page&lt;/li>
+     *  &lt;li>'next' - Moves to next page&lt;/li>
+     *  &lt;li>'back' - Moves back a page&lt;/li>
+     *  &lt;li>'totalPages' - Returns total number of pages&lt;/li>
+     *  &lt;li>'getCurrentPageData' - returns an array containing the current page's data&lt;/li>
+     *  &lt;li>'currentPage' - returns the current page number&lt;/li>
+     *  &lt;/ul>
      * @returns {jQuery}
      * @method fn.WCServiceLocationsView
      * @memberOf jQuery
@@ -526,4 +553,26 @@
         });
     };
 
-})(this, this.jQuery, this.google);
+})(this, this.jQuery, this.google);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="WC.GMaps.html">GMaps</a></li><li><a href="WC.Pager.html">Pager</a></li><li><a href="WC.ServiceLocation.html">ServiceLocation</a></li><li><a href="WC.ServiceLocationsView.html">ServiceLocationsView</a></li></ul><h3>Namespaces</h3><ul><li><a href="jQuery.html">jQuery</a></li><li><a href="WC.html">WC</a></li><li><a href="WC.GmapsAPILoader.html">GmapsAPILoader</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Apr 04 2014 15:38:16 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
