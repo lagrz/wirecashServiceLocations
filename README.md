@@ -1,6 +1,5 @@
 Wirecash Service Locations Class
 ====================================
-[![Build Status](http://ci.lagrz.com/lagrz/atmc_service_locations/badge)](http://ci.lagrz.com/lagrz/atmc_service_locations/)
 
 A jQuery / Google Maps Class that creates a templated paginated UI for displaying `ServiceLocation` records. 
 
