@@ -253,7 +253,9 @@
         var content = '';
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
-            content += $.WCTemplate(this.options.tplLocation, location.toJSON());
+            try {
+                content += $.WCTemplate(this.options.tplLocation, location.toJSON());
+            } catch (e) {}
         }
         this.container.find(this.options.contentContainer).html(content);
 
@@ -276,9 +278,9 @@
      * @private
      */
     fn._handleData = function (done, data) {
-        if (data.result) {
+        if (data.result === "true") {
             //create objects
-            var locations = $.map(data.data, $.proxy(function (obj) {
+            var locations = $.map(data.data.data, $.proxy(function (obj) {
                 var location = new $.WCServiceLocation(obj);
                 //decorate the location object with gmap
                 this.gmap.setLatLng(location);
@@ -286,6 +288,7 @@
                 this.gmap.createMarkerEvents(location, this._markerMouseEnter, this._markerMouseLeave, this);
                 return location;
             }, this));
+
             done(locations);
         } else {
             //show no data
@@ -415,7 +418,7 @@
      * @private
      */
     fn._markerMouseEnter = function (serviceLocation) {
-        this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').addClass(this.options.recordActive);
+        this.container.find('[data-agentcode="' + serviceLocation.get('agent_code') + '"]').addClass(this.options.recordActive);
     };
 
     /**
@@ -425,7 +428,30 @@
      * @private
      */
     fn._markerMouseLeave = function (serviceLocation) {
-        this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
+        this.container.find('[data-agentcode="' + serviceLocation.get('agent_code') + '"]').removeClass(this.options.recordActive);
+    };
+
+    fn.getLocationById = function (id) {
+        id = parseInt(id, 10);
+        var original = id;
+
+        for (var i = 0, s = this.pager.recs.data.length; i < s; i++) {
+            $.each(this.pager.recs.data[i], function (index, data) {
+                if(data.get('id') === id){
+                    id = data;
+                    return false;
+                }
+            });
+
+            if(id !== original){
+                break;
+            }
+        }
+
+        if(id === original){
+            return null;
+        }
+        return id;
     };
 
     window.WC.ServiceLocationsView = ServiceLocationsView;

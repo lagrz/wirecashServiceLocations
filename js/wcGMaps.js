@@ -51,12 +51,15 @@
      */
     fn._initGmaps = function () {
         this.geocoder = new google.maps.Geocoder();
+
         var latlng = new google.maps.LatLng(-104.8352628, 37.9452861);
+
         var myOptions = {
             zoom: 5,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+
         this.map = new google.maps.Map(this.options.container[0], $.extend(myOptions, this.options.mapsOptions));
     };
 
@@ -68,19 +71,29 @@
      */
     fn.geoCodeAddress = function (serviceLocation, callback) {
         var addressRequest = {};
+
         if ($.isArray(serviceLocation.get('address'))) {
+
             var location = $.map(serviceLocation.get('address'),function (val) {
                 return val.length ? val + ';' : '';
             }).join('');
+
             addressRequest.address = location;
-        } else if (serviceLocation.get('lat') !== 0) {
-            addressRequest.latlng = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
+        } else if (serviceLocation.get('coordinates').latitude !== 0) {
+
+            addressRequest.latlng = new google.maps.LatLng(
+                  serviceLocation.get('coordinates').latitude,
+                  serviceLocation.get('coordinates').longitude
+            );
         }
         this.geocoder.geocode(addressRequest, function (results, status) {
             if (status === google.maps.GeocoderStatus.OK && results.length) {
+
                 var location = results[0].geometry.location;
+
                 serviceLocation.set('gmapAddress', results[0].formatted_address);
                 serviceLocation.set('gmapLatLng', new google.maps.LatLng(location.lat, location.lng));
+
                 callback({
                     latlng: location,
                     address: results[0].formatted_address,
@@ -97,8 +110,13 @@
      * @method WC.GMaps#setLatLng
      */
     fn.setLatLng = function (serviceLocation) {
-        if (serviceLocation.get('lat') !== 0) {
-            var latlnt = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
+        if (serviceLocation.get('coordinates').latitude !== 0) {
+
+            var latlnt = new google.maps.LatLng(
+                  serviceLocation.get('coordinates').latitude,
+                  serviceLocation.get('coordinates').longitude
+            );
+
             serviceLocation.set('gmapLatLng', latlnt);
         }
     };
@@ -110,12 +128,15 @@
      */
     fn.createMarker = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var latlng = serviceLocation[i];
+
             var marker = new google.maps.Marker({//draws the markers
                 position: latlng.get('gmapLatLng'),
                 map: null
             });
+
             latlng.set('gmapMarker', marker);
         }
     };
@@ -130,8 +151,10 @@
      */
     fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
         serviceLocation = this._ensureList(serviceLocation);
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
+
             google.maps.event.addListener(location.get('gmapMarker'), 'mouseover', $.proxy(callbackOver, context, location));
             google.maps.event.addListener(location.get('gmapMarker'), 'mouseout', $.proxy(callbackOut, context, location));
         }
@@ -145,9 +168,12 @@
      */
     fn._toggleMarker = function (serviceLocation, map) {
         serviceLocation = this._ensureList(serviceLocation);
+
         map = map || null;
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
+
             location.get('gmapMarker').setMap(map);
         }
     };
@@ -177,12 +203,16 @@
      */
     fn.center = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
+
         var latlngbounds = new google.maps.LatLngBounds();
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
             latlngbounds.extend(location.get('gmapLatLng'));
         }
+
         this.map.setCenter(latlngbounds.getCenter());
+
         if (serviceLocation.length > 1) {
             this.map.fitBounds(latlngbounds);
         } else {

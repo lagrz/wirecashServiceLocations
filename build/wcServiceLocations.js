@@ -4,15 +4,15 @@
     /**
      * Super tiny and super simple template engine
      * @param {string} tpl The template string to be used. Template keys require encapsulation: {key}
-     * @param {object} d The data object used for the template.
+     * @param {object} data The data object used for the template.
      * @returns {string} Result from combining the data with the template
      * @memberOf WC
      */
-    function template(tpl, d) {
-        for (var p in d) {
+    function template(tpl, data) {
+        for (var p in data) {
             //ensure no prototype keys are used
-            if (d.hasOwnProperty.call(d, p)) {
-                tpl = tpl.replace(new RegExp('{' + p + '}', 'g'), d[p]);
+            if (data.hasOwnProperty.call(data, p)) {
+                tpl = tpl.replace(new RegExp('{' + p + '}', 'g'), data[p]);
             }
         }
         return tpl;
@@ -173,12 +173,15 @@
      */
     fn._initGmaps = function () {
         this.geocoder = new google.maps.Geocoder();
+
         var latlng = new google.maps.LatLng(-104.8352628, 37.9452861);
+
         var myOptions = {
             zoom: 5,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+
         this.map = new google.maps.Map(this.options.container[0], $.extend(myOptions, this.options.mapsOptions));
     };
 
@@ -190,19 +193,29 @@
      */
     fn.geoCodeAddress = function (serviceLocation, callback) {
         var addressRequest = {};
+
         if ($.isArray(serviceLocation.get('address'))) {
+
             var location = $.map(serviceLocation.get('address'),function (val) {
                 return val.length ? val + ';' : '';
             }).join('');
+
             addressRequest.address = location;
-        } else if (serviceLocation.get('lat') !== 0) {
-            addressRequest.latlng = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
+        } else if (serviceLocation.get('coordinates').latitude !== 0) {
+
+            addressRequest.latlng = new google.maps.LatLng(
+                  serviceLocation.get('coordinates').latitude,
+                  serviceLocation.get('coordinates').longitude
+            );
         }
         this.geocoder.geocode(addressRequest, function (results, status) {
             if (status === google.maps.GeocoderStatus.OK && results.length) {
+
                 var location = results[0].geometry.location;
+
                 serviceLocation.set('gmapAddress', results[0].formatted_address);
                 serviceLocation.set('gmapLatLng', new google.maps.LatLng(location.lat, location.lng));
+
                 callback({
                     latlng: location,
                     address: results[0].formatted_address,
@@ -219,8 +232,13 @@
      * @method WC.GMaps#setLatLng
      */
     fn.setLatLng = function (serviceLocation) {
-        if (serviceLocation.get('lat') !== 0) {
-            var latlnt = new google.maps.LatLng(serviceLocation.get('lat'), serviceLocation.get('lng'));
+        if (serviceLocation.get('coordinates').latitude !== 0) {
+
+            var latlnt = new google.maps.LatLng(
+                  serviceLocation.get('coordinates').latitude,
+                  serviceLocation.get('coordinates').longitude
+            );
+
             serviceLocation.set('gmapLatLng', latlnt);
         }
     };
@@ -232,12 +250,15 @@
      */
     fn.createMarker = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var latlng = serviceLocation[i];
+
             var marker = new google.maps.Marker({//draws the markers
                 position: latlng.get('gmapLatLng'),
                 map: null
             });
+
             latlng.set('gmapMarker', marker);
         }
     };
@@ -252,8 +273,10 @@
      */
     fn.createMarkerEvents = function (serviceLocation, callbackOver, callbackOut, context) {
         serviceLocation = this._ensureList(serviceLocation);
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
+
             google.maps.event.addListener(location.get('gmapMarker'), 'mouseover', $.proxy(callbackOver, context, location));
             google.maps.event.addListener(location.get('gmapMarker'), 'mouseout', $.proxy(callbackOut, context, location));
         }
@@ -267,9 +290,12 @@
      */
     fn._toggleMarker = function (serviceLocation, map) {
         serviceLocation = this._ensureList(serviceLocation);
+
         map = map || null;
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
+
             location.get('gmapMarker').setMap(map);
         }
     };
@@ -299,12 +325,16 @@
      */
     fn.center = function (serviceLocation) {
         serviceLocation = this._ensureList(serviceLocation);
+
         var latlngbounds = new google.maps.LatLngBounds();
+
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
             latlngbounds.extend(location.get('gmapLatLng'));
         }
+
         this.map.setCenter(latlngbounds.getCenter());
+
         if (serviceLocation.length > 1) {
             this.map.fitBounds(latlngbounds);
         } else {
@@ -329,27 +359,40 @@
      * Paginator class.
      * @constructor
      * @param {object} opts Options to initialize the class with
+     *
      * @param {integer} [opts.show=15] The number of records to show per page
+     *
      * @param {string} opts.url The URL that we will be calling via ajax to grab the records
+     *
      * @param {object} opts.params An object used to add additional params for each request to the server
-     * @param {WC.Pager~onNoData} [opts.onNoData]
-     * <p>Callback: When no data is returned from ajax call</p>
-     * @param {WC.Pager~onCreate} [opts.onCreate]
-     * <p>Callback: When the class is instantiated a</p>
-     * @param {WC.Pager~onComplete} [opts.onComplete]
-     * <p>Callback: When the first page is done generating</p>
-     * @param {WC.Pager~onLoadingData} [opts.onLoadingData]
-     * <p>Callback: When an ajax call is loading</p>
-     * @param {WC.Pager~onAjaxError} [opts.onAjaxError]
-     * <p>Callback: When an ajax call returns an error status</p>
-     * @param {WC.Pager~onAjaxComplete} [opts.onAjaxComplete]
-     * <p>Callback: When an ajax call is complete</p>
-     * @param {WC.Pager~onAjaxSuccess} [opts.onAjaxSuccess]
-     * <p>Callback: When an ajax call is successfull</p>
-     * @param {WC.Pager~onBeforePage} [opts.onBeforePage]
-     * <p>Callback: Before making an ajax request or grabbing the data for a page</p>
-     * @param {WC.Pager~onPage} [opts.onPage]
-     * <p>Callback: When a page request was made</p>
+     *
+     * @param {WC.Pager~onNoData} [opts.onNoData=jQuery.noop]
+     * Callback: When no data is returned from ajax call
+     *
+     * @param {WC.Pager~onCreate} [opts.onCreate=jQuery.noop]
+     * Callback: When the class is instantiated
+     *
+     * @param {WC.Pager~onComplete} [opts.onComplete=jQuery.noop]
+     * Callback: When the first page is done generating
+     *
+     * @param {WC.Pager~onLoadingData} [opts.onLoadingData=jQuery.noop]
+     * Callback: When an ajax call is loading
+     *
+     * @param {WC.Pager~onAjaxError} [opts.onAjaxError=jQuery.noop]
+     * Callback: When an ajax call returns an error status
+     *
+     * @param {WC.Pager~onAjaxComplete} [opts.onAjaxComplete=jQuery.noop]
+     * Callback: When an ajax call is complete
+     *
+     * @param {WC.Pager~onAjaxSuccess} [opts.onAjaxSuccess=jQuery.noop]
+     * Callback: When an ajax call is successfull
+     *
+     * @param {WC.Pager~onBeforePage} [opts.onBeforePage=jQuery.noop]
+     * Callback: Before making an ajax request or grabbing the data for a page
+     *
+     * @param {WC.Pager~onPage} [opts.onPage=jQuery.noop]
+     * Callback: When a page request was made
+     *
      * @memberOf WC
      */
     var Pager = function (opts) {
@@ -383,19 +426,17 @@
             this.getData(0);
         }
     };
-
+    // Document the callbacks
     /**
      * Callback done when no data came back from the ajax call
      * @callback WC.Pager~onNoData
      * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
      */
-
     /**
      * Callback done when the class is instantiated
      * @callback WC.Pager~onCreate
      * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
      */
-
     /**
      * Callback when first page is created
      * @callback WC.Pager~onComplete
@@ -403,22 +444,18 @@
      * @param {object} json Json data returned
      * @param {WC.Pager} pagerObject Current instance of the WC.Pager object
      */
-
     /**
      * Callback when the ajax call is loading
      * @callback WC.Pager~onLoadingData
      */
-
     /**
      * Callback when the ajax call returned an error
      * @callback WC.Pager~onAjaxError
      */
-
     /**
      * Callback done when ajax call is done
      * @callback WC.Pager~onAjaxComplete
      */
-
     /**
      * Callback when ajax call successfully obtained data from the server side. Provides a callback to first param that
      * needs to be ran with an array param containing that page's data. Used for normalizing the data.
@@ -426,14 +463,12 @@
      * @param {WC.Pager#ajaxSuccessCallback} done This callback needs to be called with the normalized data
      * @param {object} json Json data to be normalized
      */
-
     /**
      * Callback done before changing pages provides current page's data. Mostly used for processing stuff on before
      * changing to another page.
      * @callback WC.Pager~onBeforePage
      * @param {array} currentPageData Current page data
      */
-
     /**
      * Callback done to create the current page. Accepts an array with the data for the new page, and the pager object.
      * @callback WC.Pager~onPage
@@ -679,26 +714,48 @@
      * Basic Object with setter and getter representing base data for ServiceLocation also contains the objects for
      * google maps api.
      * @constructor
-     * @param {object} data
+     * @param {object} data Base data
+     * @param data.address Address
+     * @param data.agentCode Code
+     * @param data.lat Latitude
+     * @param data.lng Longitude
+     * @param data.country Country code
+     * @param data.currency Currency (USD, MXN)
+     * @param data.distance Distance in Miles
+     * @param data.hours Location hours
+     * @param data.name Location Name
+     * @param data.phone Phone number
      * @memberOf WC
      */
     var ServiceLocation = function (data) {
         this.data = $.extend({
             address: null,
-            agentCode: null,
-            lat: 0,
-            lng: 0,
+            agent_code: null,
+            coordinates: {
+                "latitude": 0,
+                "longitude": 0
+            },
             country: null,
             currency: null,
             distance: 0,
-            hours: null,
+            hours_of_ops: null,
             name: null,
             phone: null,
+            specialFields: {
+                1: [],
+                2: []
+            },
+
             //Google maps objects
             gmapMarker: null,
             gmapLatLng: null,
             gmapAddress: null
         }, data || {});
+
+        //update distance to be a shorter number
+        try {
+            this.data.distance = this.data.distance.toFixed(2);
+        } catch (ignore) {}
     };
 
     /**
@@ -709,8 +766,9 @@
 
     /**
      * Gets specified data
-     * @param key
+     * @param {string} key Name of the property
      * @returns {*}
+     * @method WC.ServiceLocation#get
      */
     fn.get = function (key) {
         if (this.data.hasOwnProperty(key)) {
@@ -721,8 +779,9 @@
 
     /**
      * Sets specified data
-     * @param key
-     * @param val
+     * @param {string} key Name of the property
+     * @param {*} val Value to be stored
+     * @method WC.ServiceLocation#set
      */
     fn.set = function (key, val) {
         this.data[key] = val;
@@ -731,8 +790,10 @@
     /**
      * Returns an object without excluded items
      * @returns {object}
+     * @method WC.ServiceLocation#toJSON
      */
     fn.toJSON = function () {
+        //exclude googles objects
         var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
         var clone = $.extend({}, this.data);
         for (var i = 0, s = exclude.length; i < s; i++) {
@@ -740,6 +801,9 @@
         }
         return clone;
     };
+
+    ServiceLocation.SENDER = 1;
+    ServiceLocation.RECIPIENT = 2;
 
     if (!window.hasOwnProperty('WC')) {
         window.WC = {};
@@ -1006,7 +1070,9 @@
         var content = '';
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
-            content += $.WCTemplate(this.options.tplLocation, location.toJSON());
+            try {
+                content += $.WCTemplate(this.options.tplLocation, location.toJSON());
+            } catch (e) {}
         }
         this.container.find(this.options.contentContainer).html(content);
 
@@ -1029,9 +1095,9 @@
      * @private
      */
     fn._handleData = function (done, data) {
-        if (data.result) {
+        if (data.result === "true") {
             //create objects
-            var locations = $.map(data.data, $.proxy(function (obj) {
+            var locations = $.map(data.data.data, $.proxy(function (obj) {
                 var location = new $.WCServiceLocation(obj);
                 //decorate the location object with gmap
                 this.gmap.setLatLng(location);
@@ -1039,6 +1105,7 @@
                 this.gmap.createMarkerEvents(location, this._markerMouseEnter, this._markerMouseLeave, this);
                 return location;
             }, this));
+
             done(locations);
         } else {
             //show no data
@@ -1168,7 +1235,7 @@
      * @private
      */
     fn._markerMouseEnter = function (serviceLocation) {
-        this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').addClass(this.options.recordActive);
+        this.container.find('[data-agentcode="' + serviceLocation.get('agent_code') + '"]').addClass(this.options.recordActive);
     };
 
     /**
@@ -1178,7 +1245,30 @@
      * @private
      */
     fn._markerMouseLeave = function (serviceLocation) {
-        this.container.find('[data-agentcode="' + serviceLocation.get('agentCode') + '"]').removeClass(this.options.recordActive);
+        this.container.find('[data-agentcode="' + serviceLocation.get('agent_code') + '"]').removeClass(this.options.recordActive);
+    };
+
+    fn.getLocationById = function (id) {
+        id = parseInt(id, 10);
+        var original = id;
+
+        for (var i = 0, s = this.pager.recs.data.length; i < s; i++) {
+            $.each(this.pager.recs.data[i], function (index, data) {
+                if(data.get('id') === id){
+                    id = data;
+                    return false;
+                }
+            });
+
+            if(id !== original){
+                break;
+            }
+        }
+
+        if(id === original){
+            return null;
+        }
+        return id;
     };
 
     window.WC.ServiceLocationsView = ServiceLocationsView;

@@ -22,20 +22,32 @@
     var ServiceLocation = function (data) {
         this.data = $.extend({
             address: null,
-            agentCode: null,
-            lat: 0,
-            lng: 0,
+            agent_code: null,
+            coordinates: {
+                "latitude": 0,
+                "longitude": 0
+            },
             country: null,
             currency: null,
             distance: 0,
-            hours: null,
+            hours_of_ops: null,
             name: null,
             phone: null,
+            specialFields: {
+                1: [],
+                2: []
+            },
+
             //Google maps objects
             gmapMarker: null,
             gmapLatLng: null,
             gmapAddress: null
         }, data || {});
+
+        //update distance to be a shorter number
+        try {
+            this.data.distance = this.data.distance.toFixed(2);
+        } catch (ignore) {}
     };
 
     /**
@@ -73,6 +85,7 @@
      * @method WC.ServiceLocation#toJSON
      */
     fn.toJSON = function () {
+        //exclude googles objects
         var exclude = ['gmapMarker', 'gmapLatLng', 'gmapAddress'];
         var clone = $.extend({}, this.data);
         for (var i = 0, s = exclude.length; i < s; i++) {
@@ -80,6 +93,9 @@
         }
         return clone;
     };
+
+    ServiceLocation.SENDER = 1;
+    ServiceLocation.RECIPIENT = 2;
 
     if (!window.hasOwnProperty('WC')) {
         window.WC = {};
