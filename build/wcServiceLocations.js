@@ -820,6 +820,10 @@
     ServiceLocation.SENDER = 1;
     ServiceLocation.RECIPIENT = 2;
 
+    ServiceLocation.COMPANY = 1;
+    ServiceLocation.PRODUCT = 2;
+    ServiceLocation.LOCATION = 3;
+
     if (!window.hasOwnProperty('WC')) {
         window.WC = {};
     }
