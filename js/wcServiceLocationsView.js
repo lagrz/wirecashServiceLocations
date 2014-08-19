@@ -204,7 +204,7 @@
             onAjaxError: noDataCallback,
 
             //when object is created
-            onCreate: $.proxy(function () {
+            onCreate: $.proxy(function (pager) {
                 //insert base html to container
                 this.container.html(this.options.tplMain);
 
@@ -214,6 +214,10 @@
                 });
 
                 this.container.trigger('WCService:create');
+
+                if(pager.ajaxDoneLoading()){
+                    pager.getData(0);
+                }
             }, this),
 
             onBeforePage: $.proxy(this._beforePage, this),
@@ -279,6 +283,12 @@
      */
     fn._handleData = function (done, data) {
         if (data.result === "true") {
+            if(this.pager.recs.totalPages === 0){
+                //update total pages
+                this.pager.recs.total = data.data.total;
+                this.pager.totalPages();
+            }
+
             //create objects
             var locations = $.map(data.data.data, $.proxy(function (obj) {
                 var location = new $.WCServiceLocation(obj);

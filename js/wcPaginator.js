@@ -62,6 +62,8 @@
             data: []
         }, opts || {});
 
+        this.ajaxCall = null;
+
         //run on create callback with object as parameter
         this.recs.onCreate(this);
 
@@ -173,10 +175,16 @@
             e = this.recs.total - 1;
         }
 
-        return {
+        var range = {
             start: s < 0 ? 0 : s,
             end: e > this.recs.total ? this.recs.total - 1 : e
         };
+
+        if(range.end <= 0){
+            range.end = this.recs.show - 1;
+        }
+
+        return range;
     };
 
     /**
@@ -204,12 +212,15 @@
         }
 
         if (this.recs.url.length) {
-            $.ajax(this.recs.url, {
+            this.ajaxCall = $.ajax(this.recs.url, {
                 data: this.recs.params,
                 type: 'POST',
                 beforeSend: this.recs.onLoadingData,
                 error: this.recs.onAjaxError,
-                complete: this.recs.onAjaxComplete,
+                complete: function (jqXHR, status) {
+                    self.ajaxCall = null;
+                    self.recs.onAjaxComplete(jqXHR, status);
+                },
                 success: function () {
                     var args = Array.prototype.slice.call(arguments, 0);
                     //prepend our callback
@@ -226,6 +237,10 @@
         }
 
         return this;
+    };
+
+    fn.ajaxDoneLoading = function () {
+        return this.ajaxCall === null || this.ajaxCall.readyState === 4;
     };
 
     /**
