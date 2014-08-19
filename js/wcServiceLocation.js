@@ -24,8 +24,8 @@
             address: null,
             agent_code: null,
             coordinates: {
-                "latitude": 0,
-                "longitude": 0
+                'latitude': 0,
+                'longitude': 0
             },
             country: null,
             currency: null,

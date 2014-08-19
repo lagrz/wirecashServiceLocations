@@ -747,8 +747,8 @@
             address: null,
             agent_code: null,
             coordinates: {
-                "latitude": 0,
-                "longitude": 0
+                'latitude': 0,
+                'longitude': 0
             },
             country: null,
             currency: null,
@@ -1118,7 +1118,7 @@
      * @private
      */
     fn._handleData = function (done, data) {
-        if (data.result === "true") {
+        if (data.result === 'true') {
             if(this.pager.recs.totalPages === 0){
                 //update total pages
                 this.pager.recs.total = data.data.total;
@@ -1150,12 +1150,14 @@
      */
     fn._loading = function () {
         this.container.find(this.options.contentContainer).html(this.options.tplLoading);
+
         this._updatePagerButtons({
             'first': false,
             'prev': false,
             'next': false,
             'last': false
         });
+
         this.container.trigger('WCService:onLoading');
     };
 
@@ -1167,9 +1169,12 @@
     fn._noData = function () {
         this.container.find(this.options.contentContainer).html(this.options.tplNoData);
         this.container.find(this.options.mapContainer).hide();
+
+        //disable buttons
         $.each(['pageFirst', 'pageLast', 'pageNext', 'pageBack'], $.proxy(function (index, elem) {
             this.container.find(this.options[elem]).hide();
         }, this));
+
         this.container.trigger('WCService:onNoData');
     };
 
@@ -1187,7 +1192,9 @@
         this.boundMethods.prev = [container.find(this.options.pageBack), $.proxy(this.pager.back, this.pager)];
 
         $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index, item) {
+            //if button element still exists
             if (this.boundMethods[item][0].length) {
+                //create listener
                 this.boundMethods[item][0].on('click', this.boundMethods[item][1]).addClass(this.options.pageEnable);
             }
         }, this));
@@ -1218,6 +1225,7 @@
             var id = target.data('agentcode') + '';
             var data = this.pager.getCurrentPageData();
             this.gmap.hideMarker(data);
+
             //find the one we have an id for and show it
             for (var i = 0, s = data.length, location; i < s; i++) {
                 location = data[i];
@@ -1280,14 +1288,15 @@
     fn.getLocationById = function (id) {
         id = parseInt(id, 10);
         var original = id;
+        var rec = function (index, data) {
+            if(data.get('id') === id){
+                id = data;
+                return false;
+            }
+        };
 
         for (var i = 0, s = this.pager.recs.data.length; i < s; i++) {
-            $.each(this.pager.recs.data[i], function (index, data) {
-                if(data.get('id') === id){
-                    id = data;
-                    return false;
-                }
-            });
+            $.each(this.pager.recs.data[i], rec);
 
             if(id !== original){
                 break;
