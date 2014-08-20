@@ -420,7 +420,7 @@
             data: []
         }, opts || {});
 
-        this.ajaxCallajaxCall = null;
+        this.ajaxCall = null;
 
         //run on create callback with object as parameter
         this.recs.onCreate(this);
@@ -598,7 +598,11 @@
     };
 
     fn.ajaxDoneLoading = function () {
-        return this.ajaxCall === null || this.ajaxCall.readyState === 4;
+        if(this.ajaxCall === null){
+            return true;
+        }
+
+        return this.ajaxCall.readyState === 4;
     };
 
     /**
