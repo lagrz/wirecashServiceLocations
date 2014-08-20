@@ -62,7 +62,7 @@
             data: []
         }, opts || {});
 
-        this.ajaxCall = null;
+        this.ajaxCallajaxCall = null;
 
         //run on create callback with object as parameter
         this.recs.onCreate(this);
@@ -355,6 +355,23 @@
             this.getData(pageNo);
         }
         return this;
+    };
+    /**
+     * Resets the pager to allow changes in search result
+     */
+    fn.reset = function(){
+        if(!this.ajaxDoneLoading() && this.ajaxCall !== null){
+            //abort current call
+            this.ajaxCall.abort();
+        }
+
+        //reset data
+        $.extend(this.recs, {
+            currPage: 0,
+            totalPages: 0,
+            total: 0,
+            data: []
+        });
     };
 
     if (!window.hasOwnProperty('WC')) {

@@ -449,6 +449,11 @@
         this.container.find('[data-agentcode="' + serviceLocation.get('agent_code') + '"]').removeClass(this.options.recordActive);
     };
 
+    /**
+     * Returns the WC.ServiceLocation object pertaining to that ID, mainly used to grab special fields data
+     * @param {Number} id
+     * @returns {WC.ServiceLocation}
+     */
     fn.getLocationById = function (id) {
         id = parseInt(id, 10);
         var original = id;
@@ -471,6 +476,24 @@
             return null;
         }
         return id;
+    };
+
+    /**
+     * <p>Change the search results by reseting the data and changing the parameters</p>
+     * @param {object} params
+     */
+    fn.changeSearchConditions = function(params){
+        //remove gmap markers first
+        $.each(this.pager.recs.data, $.proxy(function(ignore, list){
+            this.gmap.removeMarker(list);
+        }, this));
+
+        //reset the pager
+        this.pager.reset();
+
+        //change the id of the product
+        $.extend(this.pager.recs.params, params || {});
+        this.pager.getData(0);
     };
 
     window.WC.ServiceLocationsView = ServiceLocationsView;

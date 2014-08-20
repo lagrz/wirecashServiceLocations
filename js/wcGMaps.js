@@ -196,6 +196,10 @@
         this._toggleMarker(serviceLocation);
     };
 
+    fn.removeMarker = function(serviceLocation){
+        this._toggleMarker(serviceLocation, null);
+    };
+
     /**
      * Centers the viewport of the map based on the provided servicelocation(s)
      * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
