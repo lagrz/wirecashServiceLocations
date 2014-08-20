@@ -318,6 +318,10 @@
         this._toggleMarker(serviceLocation);
     };
 
+    fn.removeMarker = function(serviceLocation){
+        this._toggleMarker(serviceLocation, null);
+    };
+
     /**
      * Centers the viewport of the map based on the provided servicelocation(s)
      * @param {WC.ServiceLocation | array} serviceLocation Service Location Object
@@ -416,7 +420,7 @@
             data: []
         }, opts || {});
 
-        this.ajaxCall = null;
+        this.ajaxCallajaxCall = null;
 
         //run on create callback with object as parameter
         this.recs.onCreate(this);
@@ -709,6 +713,23 @@
             this.getData(pageNo);
         }
         return this;
+    };
+    /**
+     * Resets the pager to allow changes in search result
+     */
+    fn.reset = function(){
+        if(!this.ajaxDoneLoading() && this.ajaxCall !== null){
+            //abort current call
+            this.ajaxCall.abort();
+        }
+
+        //reset data
+        $.extend(this.recs, {
+            currPage: 0,
+            totalPages: 0,
+            total: 0,
+            data: []
+        });
     };
 
     if (!window.hasOwnProperty('WC')) {
@@ -1285,6 +1306,11 @@
         this.container.find('[data-agentcode="' + serviceLocation.get('agent_code') + '"]').removeClass(this.options.recordActive);
     };
 
+    /**
+     * Returns the WC.ServiceLocation object pertaining to that ID, mainly used to grab special fields data
+     * @param {Number} id
+     * @returns {WC.ServiceLocation}
+     */
     fn.getLocationById = function (id) {
         id = parseInt(id, 10);
         var original = id;
@@ -1307,6 +1333,24 @@
             return null;
         }
         return id;
+    };
+
+    /**
+     * <p>Change the search results by reseting the data and changing the parameters</p>
+     * @param {object} params
+     */
+    fn.changeSearchConditions = function(params){
+        //remove gmap markers first
+        $.each(this.pager.recs.data, $.proxy(function(ignore, list){
+            this.gmap.removeMarker(list);
+        }, this));
+
+        //reset the pager
+        this.pager.reset();
+
+        //change the id of the product
+        $.extend(this.pager.recs.params, params || {});
+        this.pager.getData(0);
     };
 
     window.WC.ServiceLocationsView = ServiceLocationsView;
