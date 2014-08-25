@@ -140,9 +140,6 @@
             //used to add additional params for each request to the server
             pagerRecordsParams: {},
 
-            //this data is added as part of the data available to templates
-            additionalTemplateData: {},
-
             //google api
             mapsAPIKey: '',
 
@@ -261,7 +258,7 @@
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
             try {
-                content += $.WCTemplate(this.options.tplLocation, $.extend({}, this.options.additionalTemplateData, location.toJSON()));
+                content += $.WCTemplate(this.options.tplLocation, $.extend({}, this.options.pagerRecordsParams, location.toJSON()));
             } catch (e) {}
         }
         this.container.find(this.options.contentContainer).html(content);
