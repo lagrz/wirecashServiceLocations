@@ -154,9 +154,9 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
-
-            google.maps.event.addListener(location.get('gmapMarker'), 'mouseover', $.proxy(callbackOver, context, location));
-            google.maps.event.addListener(location.get('gmapMarker'), 'mouseout', $.proxy(callbackOut, context, location));
+            var marker = location.get('gmapMarker');
+            google.maps.event.addListener(marker, 'mouseover', $.proxy(callbackOver, context, location));
+            google.maps.event.addListener(marker, 'mouseout', $.proxy(callbackOut, context, location));
         }
     };
 
@@ -194,10 +194,6 @@
      */
     fn.hideMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation);
-    };
-
-    fn.removeMarker = function(serviceLocation){
-        this._toggleMarker(serviceLocation, null);
     };
 
     /**
