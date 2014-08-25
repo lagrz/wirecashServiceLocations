@@ -276,9 +276,9 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
-
-            google.maps.event.addListener(location.get('gmapMarker'), 'mouseover', $.proxy(callbackOver, context, location));
-            google.maps.event.addListener(location.get('gmapMarker'), 'mouseout', $.proxy(callbackOut, context, location));
+            var marker = location.get('gmapMarker');
+            google.maps.event.addListener(marker, 'mouseover', $.proxy(callbackOver, context, location));
+            google.maps.event.addListener(marker, 'mouseout', $.proxy(callbackOut, context, location));
         }
     };
 
@@ -316,10 +316,6 @@
      */
     fn.hideMarker = function (serviceLocation) {
         this._toggleMarker(serviceLocation);
-    };
-
-    fn.removeMarker = function(serviceLocation){
-        this._toggleMarker(serviceLocation, null);
     };
 
     /**
@@ -1076,7 +1072,7 @@
 
                 this.container.trigger('WCService:create');
 
-                if(pager.ajaxDoneLoading()){
+                if (pager.ajaxDoneLoading()) {
                     pager.getData(0);
                 }
             }, this),
@@ -1119,7 +1115,7 @@
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
             try {
-                content += $.WCTemplate(this.options.tplLocation, location.toJSON());
+                content += $.WCTemplate(this.options.tplLocation, $.extend({}, this.options.pagerRecordsParams, location.toJSON()));
             } catch (e) {}
         }
         this.container.find(this.options.contentContainer).html(content);
@@ -1144,7 +1140,7 @@
      */
     fn._handleData = function (done, data) {
         if (data.result === 'true') {
-            if(this.pager.recs.totalPages === 0){
+            if (this.pager.recs.totalPages === 0) {
                 //update total pages
                 this.pager.recs.total = data.data.total;
                 this.pager.totalPages();
@@ -1319,7 +1315,7 @@
         id = parseInt(id, 10);
         var original = id;
         var rec = function (index, data) {
-            if(data.get('id') === id){
+            if (data.get('id') === id) {
                 id = data;
                 return false;
             }
@@ -1328,12 +1324,12 @@
         for (var i = 0, s = this.pager.recs.data.length; i < s; i++) {
             $.each(this.pager.recs.data[i], rec);
 
-            if(id !== original){
+            if (id !== original) {
                 break;
             }
         }
 
-        if(id === original){
+        if (id === original) {
             return null;
         }
         return id;
@@ -1343,10 +1339,10 @@
      * <p>Change the search results by reseting the data and changing the parameters</p>
      * @param {object} params
      */
-    fn.changeSearchConditions = function(params){
+    fn.changeSearchConditions = function (params) {
         //remove gmap markers first
-        $.each(this.pager.recs.data, $.proxy(function(ignore, list){
-            this.gmap.removeMarker(list);
+        $.each(this.pager.recs.data, $.proxy(function (ignore, list) {
+            this.gmap.hideMarker(list);
         }, this));
 
         //reset the pager
