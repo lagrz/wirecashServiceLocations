@@ -994,8 +994,11 @@
             pagerShowPerPage: 5,
             pagerTotalRecords: 0,
             pagerRecordsUrl: '',
+
             //used to add additional params for each request to the server
             pagerRecordsParams: {},
+            //Manipulate each individual record (before displaying)
+            additionalDataHandler: null,
 
             //google api
             mapsAPIKey: '',
@@ -1063,7 +1066,12 @@
             //when object is created
             onCreate: $.proxy(function (pager) {
                 //insert base html to container
-                this.container.html(this.options.tplMain);
+                if ($.isFunction(this.options.tplMain)) {
+                    var html = this.options.tplMain(this.options.pagerRecordsParams);
+                    this.container.html(html);
+                } else {
+                    this.container.html(this.options.tplMain);
+                }
 
                 //create the google map obj
                 this.gmap = new $.WCGmaps({
@@ -1112,10 +1120,17 @@
      */
     fn._showPage = function (serviceLocations) {
         var content = '';
+        var tplIsFunction = $.isFunction(this.options.tplLocation);
         for (var i = 0, s = serviceLocations.length, location; i < s; i++) {
             location = serviceLocations[i];
             try {
-                content += $.WCTemplate(this.options.tplLocation, $.extend({}, this.options.pagerRecordsParams, location.toJSON()));
+                var data = $.extend({}, this.options.pagerRecordsParams, location.toJSON());
+                data = this.options.additionalDataHandler !== null ? this.options.additionalDataHandler(data) : data;
+                if(tplIsFunction){
+                    content += this.options.tplLocation(data);
+                }else{
+                    content += $.WCTemplate(this.options.tplLocation, data);
+                }
             } catch (e) {}
         }
         this.container.find(this.options.contentContainer).html(content);
@@ -1170,7 +1185,12 @@
      * @private
      */
     fn._loading = function () {
+        if($.isFunction(this.options.tplLoading)){
+            var html = this.options.tplLoading(this.options.pagerRecordsParams);
+            this.container.find(this.options.contentContainer).html(html);
+        }else{
         this.container.find(this.options.contentContainer).html(this.options.tplLoading);
+        }
 
         this._updatePagerButtons({
             'first': false,
@@ -1188,7 +1208,12 @@
      * @private
      */
     fn._noData = function () {
-        this.container.find(this.options.contentContainer).html(this.options.tplNoData);
+        if($.isFunction(this.options.tplNoData)){
+            var html = this.options.tplNoData(this.options.pagerRecordsParams);
+            this.container.find(this.options.contentContainer).html(html);
+        }else{
+            this.container.find(this.options.contentContainer).html(this.options.tplNoData);
+        }
         this.container.find(this.options.mapContainer).hide();
 
         //disable buttons
