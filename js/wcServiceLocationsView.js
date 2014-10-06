@@ -221,7 +221,7 @@
                     container: this.container.find(this.options.mapContainer)
                 });
 
-                this.container.trigger('WCService:create');
+                this.container.trigger('WCService:create',[this]);
 
                 if (pager.ajaxDoneLoading()) {
                     pager.getData(0);
@@ -252,7 +252,7 @@
      */
     fn._beforePage = function (serviceLocations) {
         this.gmap.hideMarker(serviceLocations);
-        this.container.trigger('WCService:beforePage');
+        this.container.trigger('WCService:beforePage',[this]);
     };
 
     /**
@@ -269,9 +269,9 @@
             try {
                 var data = $.extend({}, this.options.pagerRecordsParams, location.toJSON());
                 data = this.options.additionalDataHandler !== null ? this.options.additionalDataHandler(data) : data;
-                if(tplIsFunction){
+                if (tplIsFunction) {
                     content += this.options.tplLocation(data);
-                }else{
+                } else {
                     content += $.WCTemplate(this.options.tplLocation, data);
                 }
             } catch (e) {}
@@ -286,7 +286,7 @@
         //update the markers
         this.gmap.showMarker(serviceLocations);
         this.gmap.center(serviceLocations);
-        this.container.trigger('WCService:onPage');
+        this.container.trigger('WCService:onPage', [this]);
     };
 
     /**
@@ -319,7 +319,7 @@
             //show no data
             done([]);
         }
-        this.container.trigger('WCService:onData', data);
+        this.container.trigger('WCService:onData', [data, this]);
     };
 
     /**
@@ -328,11 +328,11 @@
      * @private
      */
     fn._loading = function () {
-        if($.isFunction(this.options.tplLoading)){
+        if ($.isFunction(this.options.tplLoading)) {
             var html = this.options.tplLoading(this.options.pagerRecordsParams);
             this.container.find(this.options.contentContainer).html(html);
-        }else{
-        this.container.find(this.options.contentContainer).html(this.options.tplLoading);
+        } else {
+            this.container.find(this.options.contentContainer).html(this.options.tplLoading);
         }
 
         this._updatePagerButtons({
@@ -342,7 +342,7 @@
             'last': false
         });
 
-        this.container.trigger('WCService:onLoading');
+        this.container.trigger('WCService:onLoading', [this]);
     };
 
     /**
@@ -351,10 +351,10 @@
      * @private
      */
     fn._noData = function () {
-        if($.isFunction(this.options.tplNoData)){
+        if ($.isFunction(this.options.tplNoData)) {
             var html = this.options.tplNoData(this.options.pagerRecordsParams);
             this.container.find(this.options.contentContainer).html(html);
-        }else{
+        } else {
             this.container.find(this.options.contentContainer).html(this.options.tplNoData);
         }
         this.container.find(this.options.mapContainer).hide();
@@ -364,7 +364,7 @@
             this.container.find(this.options[elem]).hide();
         }, this));
 
-        this.container.trigger('WCService:onNoData');
+        this.container.trigger('WCService:onNoData', [this]);
     };
 
     /**
@@ -396,7 +396,7 @@
             container.on('mouseleave', '[data-agentCode]', $.proxy(this._onMouseLeave, this));
         }
 
-        this.container.trigger('WCService:onFirstRun');
+        this.container.trigger('WCService:onFirstRun', [this]);
     };
 
     /**
@@ -407,18 +407,18 @@
      */
     fn._onHover = function (event) {
         var target = $(event.target);
-        if (!target.is('[data-agentcode]')) {
-            target = target.parents('[data-agentcode]');
+        if (!target.is('[data-id]')) {
+            target = target.closest('[data-id]');
         }
         if (target.length) {
-            var id = target.data('agentcode') + '';
+            var id = parseInt(target.data('id'), 10);
             var data = this.pager.getCurrentPageData();
             this.gmap.hideMarker(data);
 
             //find the one we have an id for and show it
             for (var i = 0, s = data.length, location; i < s; i++) {
                 location = data[i];
-                if (location.get('agentCode') === id) {
+                if (parseInt(location.get('id'), 10) === id) {
                     this.gmap.showMarker(location);
                 }
             }

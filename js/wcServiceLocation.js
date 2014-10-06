@@ -94,6 +94,13 @@
         return clone;
     };
 
+    fn.hasSpecialFields = function (section) {
+        if (section !== ServiceLocation.SENDER || section !== ServiceLocation.RECIPIENT) {
+            return null;
+        }
+        return this.get('specialFields')[section].length !== 0;
+    };
+
     ServiceLocation.SENDER = 1;
     ServiceLocation.RECIPIENT = 2;
 
