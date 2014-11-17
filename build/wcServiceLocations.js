@@ -566,6 +566,7 @@
         }
 
         if (this.recs.url.length) {
+            console.log('INSIDE PAGINATOR: ',this.recs);
             this.ajaxCall = $.ajax(this.recs.url, {
                 data: this.recs.params,
                 type: 'POST',
