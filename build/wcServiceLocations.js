@@ -337,8 +337,12 @@
 
         if (serviceLocation.length > 1) {
             this.map.fitBounds(latlngbounds);
+
+            if(this.map.getZoom() >= 15){
+                this.map.setZoom(10);
+            }
         } else {
-            this.map.setZoom(15);
+            this.map.setZoom(10);
         }
     };
 
@@ -1086,7 +1090,7 @@
                     container: this.container.find(this.options.mapContainer)
                 });
 
-                this.container.trigger('WCService:create',[this]);
+                this.container.trigger('WCService:create', [this]);
 
                 if (pager.ajaxDoneLoading()) {
                     pager.getData(0);
@@ -1107,6 +1111,11 @@
             //gets the data for specific page
             onPage: $.proxy(this._showPage, this)
         });
+
+        this.container.on('resizemap', $.proxy(function () {
+            window.google.maps.event.trigger(this.gmap.map, "resize");
+            this.pager.first();
+        }, this));
     };
 
     /**
@@ -1117,7 +1126,7 @@
      */
     fn._beforePage = function (serviceLocations) {
         this.gmap.hideMarker(serviceLocations);
-        this.container.trigger('WCService:beforePage',[this]);
+        this.container.trigger('WCService:beforePage', [this]);
     };
 
     /**
@@ -1152,6 +1161,11 @@
         this.gmap.showMarker(serviceLocations);
         this.gmap.center(serviceLocations);
         this.container.trigger('WCService:onPage', [this]);
+
+        //disable buttons
+        $.each(['pageFirst', 'pageLast', 'pageNext', 'pageBack'], $.proxy(function (index, elem) {
+            this.container.find(this.options[elem]).show();
+        }, this));
     };
 
     /**
@@ -1195,8 +1209,10 @@
     fn._loading = function () {
         if ($.isFunction(this.options.tplLoading)) {
             var html = this.options.tplLoading(this.options.pagerRecordsParams);
-            this.container.find(this.options.contentContainer).html(html);
-        } else {
+            if (html.length) {
+                this.container.find(this.options.contentContainer).html(html);
+            }
+        } else if (this.options.tplLoading.length) {
             this.container.find(this.options.contentContainer).html(this.options.tplLoading);
         }
 
@@ -1240,10 +1256,39 @@
     fn._firstRun = function () {
         //on first run create the listeners for the paging
         var container = this.container;
-        this.boundMethods.first = [container.find(this.options.pageFirst), $.proxy(this.pager.first, this.pager)];
-        this.boundMethods.last = [container.find(this.options.pageLast), $.proxy(this.pager.last, this.pager)];
-        this.boundMethods.next = [container.find(this.options.pageNext), $.proxy(this.pager.next, this.pager)];
-        this.boundMethods.prev = [container.find(this.options.pageBack), $.proxy(this.pager.back, this.pager)];
+        if (!this.boundMethods.hasOwnProperty("first")) {
+            this.boundMethods.first = [
+                container.find(this.options.pageFirst),
+                $.proxy(function (e) {
+                    e.preventDefault();
+                    this.first();
+                }, this.pager)
+            ];
+        }
+        if (!this.boundMethods.hasOwnProperty("last")) {
+            this.boundMethods.last = [
+                container.find(this.options.pageLast),
+                $.proxy(function (e) {
+                    e.preventDefault();
+                    this.last();
+                }, this.pager)];
+        }
+        if (!this.boundMethods.hasOwnProperty("next")) {
+            this.boundMethods.next = [
+                container.find(this.options.pageNext),
+                $.proxy(function (e) {
+                    e.preventDefault();
+                    this.next();
+                }, this.pager)];
+        }
+        if (!this.boundMethods.hasOwnProperty("prev")) {
+            this.boundMethods.prev = [
+                container.find(this.options.pageBack),
+                $.proxy(function (e) {
+                    e.preventDefault();
+                    this.back();
+                }, this.pager)];
+        }
 
         $.each(['first', 'last', 'next', 'prev'], $.proxy(function (index, item) {
             //if button element still exists
@@ -1355,7 +1400,9 @@
         };
 
         for (var i = 0, s = this.pager.recs.data.length; i < s; i++) {
-            $.each(this.pager.recs.data[i], rec);
+            if (this.pager.recs.data[i]) {
+                $.each(this.pager.recs.data[i], rec);
+            }
 
             if (id !== original) {
                 break;
@@ -1365,6 +1412,7 @@
         if (id === original) {
             return null;
         }
+
         return id;
     };
 

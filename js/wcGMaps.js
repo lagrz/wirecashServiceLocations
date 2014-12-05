@@ -215,8 +215,12 @@
 
         if (serviceLocation.length > 1) {
             this.map.fitBounds(latlngbounds);
+
+            if(this.map.getZoom() >= 15){
+                this.map.setZoom(10);
+            }
         } else {
-            this.map.setZoom(15);
+            this.map.setZoom(10);
         }
     };
 
