@@ -554,7 +554,9 @@
     fn.changeSearchConditions = function (params) {
         //remove gmap markers first
         $.each(this.pager.recs.data, $.proxy(function (ignore, list) {
-            this.gmap.hideMarker(list);
+            if (list) {
+                this.gmap.hideMarker(list);
+            }
         }, this));
 
         //reset the pager

@@ -160,6 +160,9 @@
      * @private
      */
     fn._ensureList = function (obj) {
+        if(obj === undefined){
+            return [];
+        }
         if (!$.isArray(obj)) {
             obj = [obj];
         }
@@ -196,7 +199,7 @@
 
         if ($.isArray(serviceLocation.get('address'))) {
 
-            var location = $.map(serviceLocation.get('address'),function (val) {
+            var location = $.map(serviceLocation.get('address'), function (val) {
                 return val.length ? val + ';' : '';
             }).join('');
 
@@ -295,8 +298,9 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
-
-            location.get('gmapMarker').setMap(map);
+            if (location) {
+                location.get('gmapMarker').setMap(map);
+            }
         }
     };
 
@@ -338,7 +342,7 @@
         if (serviceLocation.length > 1) {
             this.map.fitBounds(latlngbounds);
 
-            if(this.map.getZoom() >= 15){
+            if (this.map.getZoom() >= 15) {
                 this.map.setZoom(10);
             }
         } else {
@@ -1423,7 +1427,9 @@
     fn.changeSearchConditions = function (params) {
         //remove gmap markers first
         $.each(this.pager.recs.data, $.proxy(function (ignore, list) {
-            this.gmap.hideMarker(list);
+            if (list) {
+                this.gmap.hideMarker(list);
+            }
         }, this));
 
         //reset the pager
