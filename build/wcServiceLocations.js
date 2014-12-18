@@ -1265,6 +1265,7 @@
                 container.find(this.options.pageFirst),
                 $.proxy(function (e) {
                     e.preventDefault();
+                    console.log("FIRST PAGE CLICK");
                     this.first();
                 }, this.pager)
             ];
@@ -1274,6 +1275,7 @@
                 container.find(this.options.pageLast),
                 $.proxy(function (e) {
                     e.preventDefault();
+                    console.log("LAST PAGE CLICK");
                     this.last();
                 }, this.pager)];
         }
@@ -1282,6 +1284,7 @@
                 container.find(this.options.pageNext),
                 $.proxy(function (e) {
                     e.preventDefault();
+                    console.log("NEXT PAGE CLICK");
                     this.next();
                 }, this.pager)];
         }
@@ -1290,6 +1293,7 @@
                 container.find(this.options.pageBack),
                 $.proxy(function (e) {
                     e.preventDefault();
+                    console.log("PREVIOUS PAGE CLICK");
                     this.back();
                 }, this.pager)];
         }
