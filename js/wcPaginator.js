@@ -240,6 +240,10 @@
         return this;
     };
 
+    /**
+     * Determines whether or not current ajax call is complete
+     * @returns {boolean}
+     */
     fn.ajaxDoneLoading = function () {
         if(this.ajaxCall === null){
             return true;

@@ -18,7 +18,7 @@ You can also use the basic object factory by using `$.WCServiceLocationsView.cre
 
 * Using the new Object pattern:     `new $.WCServiceLocationsView( OPTIONS );`
 * Using the object factory pattern: `$.WCServiceLocationsView.create( OPTIONS );`
-* Using the jQuery plugin pattern:  `$('#the-container').WCServiceLocationsView( OPTIONS );`
+* (Deprecated) Using the jQuery plugin pattern:  `$('#the-container').WCServiceLocationsView( OPTIONS );`
 
 All of these forms of instantiation require that you provide an object as a parameter containing the following:
 
@@ -28,7 +28,7 @@ All of these forms of instantiation require that you provide an object as a para
                         if using the jQuery plugin pattern you can omit this
 
     tplMain             The main container template, can be either string or a valid
-                        html / jQuery element.
+                        html / jQuery element / Function that returns a string.
 
                         It MUST contain at least an element with the following:
                             - Whatever class defined for option 'mapContainer', default: '.wc-map-container'
@@ -40,8 +40,8 @@ All of these forms of instantiation require that you provide an object as a para
                             - Whatever class defined for option 'pageNext', default: '.wc-page-next'
                             - Whatever class defined for option 'pageBack', default: '.wc-page-back'
 
-    tplLocation         The template that generates each location record, must be a string
-                        Can have any of the following keys:
+    tplLocation         The template that generates each location record, must be a string / Function that returns a
+                        string. Can have any of the following keys:
                             {address}
                             {agentCode}
                             {lat}
@@ -102,14 +102,15 @@ Available Methods using the jQuery pattern:
 
     METHODS:
     ------------------
-    first                Calls the paginator to move to the first page
-    last                 Calls the paginator to move to the last page
-    next                 Calls the paginator to move to the next page
-    back                 Calls the paginator to move to the previous page
-    page                 Move to specified page number
-    totalPages           Returns the total number of pages available
-    currentPage          Returns the current page number
-    getCurrentPageData   Returns an array with `ServiceLocation` objects in it
+    first                   Calls the paginator to move to the first page
+    last                    Calls the paginator to move to the last page
+    next                    Calls the paginator to move to the next page
+    back                    Calls the paginator to move to the previous page
+    page                    Move to specified page number
+    totalPages              Returns the total number of pages available
+    currentPage             Returns the current page number
+    getCurrentPageData      Returns an array with `ServiceLocation` objects in it
+    changeSearchConditions  Change the search params used by the pager object
 
 
 jQuery listenable events triggered on the container element:

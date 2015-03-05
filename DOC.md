@@ -17,6 +17,6 @@ You can also use the basic object factory by using `$.WCServiceLocationsView.cre
 
 * Using the new Object pattern:     `new $.WCServiceLocationsView( OPTIONS );`
 * Using the object factory pattern: `$.WCServiceLocationsView.create( OPTIONS );`
-* Using the jQuery plugin pattern:  `$('#the-container').WCServiceLocationsView( OPTIONS );`
+* (Deprecated) Using the jQuery plugin pattern:  `$('#the-container').WCServiceLocationsView( OPTIONS );`
 
 Refer to the [`ServiceLocationsView`](WC.ServiceLocationsView.html) Class documentation for the various options properties available.

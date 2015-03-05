@@ -602,6 +602,10 @@
         return this;
     };
 
+    /**
+     * Determines whether or not current ajax call is complete
+     * @returns {boolean}
+     */
     fn.ajaxDoneLoading = function () {
         if(this.ajaxCall === null){
             return true;
@@ -913,8 +917,8 @@
      * @param {jQuery} options.container
      * <p>The main container element must be a valid jQuery object, if using the jQuery plugin pattern you can omit this</p>
      *
-     * @param {string} options.tplMain
-     * <p>The main container template, can be either string or a valid html / jQuery element.</p>
+     * @param {string | function} options.tplMain
+     * <p>The main container template, can be either string or a valid html / jQuery element / function that returns a string.</p>
      * <p>It MUST contain at least an element with the following:</p>
      * <ul>
      * <li>Whatever class defined for option 'mapContainer', default: '.wc-map-container'</li>
@@ -928,8 +932,8 @@
      * <li>- Whatever class defined for option 'pageBack', default: '.wc-page-back'</li>
      * </ul>
      *
-     * @param {string} options.tplLocation
-     * <p>The template that generates each location record, must be a string</p>
+     * @param {string | function} options.tplLocation
+     * <p>The template that generates each location record, must be a string / function that returns a string</p>
      * <p>Can have any of the following keys:</p>
      * <ul>
      *     <li>{address}</li>
@@ -1394,8 +1398,9 @@
 
     /**
      * Returns the WC.ServiceLocation object pertaining to that ID, mainly used to grab special fields data
-     * @param {Number} id
+     * @param {Number} id ID of location
      * @returns {WC.ServiceLocation}
+     * @method WC.ServiceLocationsView#getLocationById
      */
     fn.getLocationById = function (id) {
         id = parseInt(id, 10);
@@ -1425,8 +1430,9 @@
     };
 
     /**
-     * <p>Change the search results by reseting the data and changing the parameters</p>
-     * @param {object} params
+     * <p>Change the search results by reseting the data and changing the parameters. Automatically grabs first page of new set.</p>
+     * @param {object} params Parameters that are going to overwrite params used by the pager
+     * @method WC.ServiceLocationsView#changeSearchConditions
      */
     fn.changeSearchConditions = function (params) {
         //remove gmap markers first
@@ -1482,7 +1488,7 @@
     };
 
     /**
-     * jQuery plugin for the ServicesLocationView Class
+     * jQuery plugin for the ServicesLocationView Class, no longer supported
      * @param {object|string} options {@link WC.ServiceLocationsView}
      *  <p>Additionally the following Strings are valid parameters</p>
      *  <ul>
@@ -1498,6 +1504,7 @@
      * @method fn.WCServiceLocationsView
      * @memberOf jQuery
      * @public
+     * @deprecated
      */
     $.fn.WCServiceLocationsView = function (options) {
         var args = Array.prototype.slice.call(arguments, 1);

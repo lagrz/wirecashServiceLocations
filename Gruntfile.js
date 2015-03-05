@@ -62,9 +62,11 @@ module.exports = function (grunt) {
         },
         jsdoc : {
             dist : {
-                src: ['js/*.js','DOC.md'],
+                src: ['js/*.js', 'DOC.md'],
                 options: {
-                    destination: 'doc',
+                    destination: 'doc/dist',
+                    configure: 'doc/jaguarjs-jsdoc-master/conf.json',
+                    template: 'doc/jaguarjs-jsdoc-master',
                     'private': false
                 }
             }
