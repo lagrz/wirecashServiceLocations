@@ -45,6 +45,20 @@ module.exports = function (grunt) {
                         'js/wcServiceLocationsView.js'
                     ]
                 }
+            },
+            angular: {
+                files:{
+                    'build/ngLocations.js': [
+                        'js/wcTemplate.js',
+                        'js/wcGMapsAPILoader.js',
+                        'js/wcGMaps.js',
+                        'js/wcPaginator.js',
+                        'js/wcServiceLocation.js',
+                        'js/wcServiceLocationsView.js',
+                        'js/wcTemplates.js',
+                        'js/ngLocations.js'
+                    ]
+                }
             }
         },
         uglify: {
@@ -70,6 +84,19 @@ module.exports = function (grunt) {
                     'private': false
                 }
             }
+        },
+        handlebars: {
+            compile: {
+                options: {
+                    namespace: 'WC.locationsTPL',
+                    processName: function(filePath){
+                        return filePath.split('/')[1].replace('.hbs','');
+                    }
+                },
+                files: {
+                    'js/wcTemplates.js': ['templates/*.hbs']
+                }
+            }
         }
     });
 
@@ -79,7 +106,8 @@ module.exports = function (grunt) {
         'grunt-contrib-connect',
         'grunt-contrib-concat',
         'grunt-contrib-uglify',
-        'grunt-jsdoc'
+        'grunt-jsdoc',
+        'grunt-contrib-handlebars'
     ].forEach(
         function (task) {
             grunt.loadNpmTasks(task);
@@ -88,4 +116,6 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['concat', 'uglify']);
 
     grunt.registerTask('default', ['jshint', 'connect', 'qunit']);
+
+    grunt.registerTask('angular', ['handlebars', 'concat']);
 };

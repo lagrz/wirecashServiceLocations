@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WireCash</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Send money to over 150 countries">
+    <meta name="author" content="Wirecash">
+
+    <link rel="icon" type="image/png" href="https://www.acstc.com/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="https://www.acstc.com/favicon.png">
+
+    <!-- CSS -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400,600' rel='stylesheet' type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+
+    <link rel="stylesheet" type="text/css" href="/card/wirecash/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/card/wirecash/css/chosen.css"/>
+    <link rel="stylesheet" type="text/css" href="/card/wirecash/css/style.css"/>
+</head>
+<body>
+
+<div id="site-header-wrapper">
+    <div class="container">
+        <header>
+            <div class="pull-left">
+                <a href="http://wirecash.com">
+                    <img src="https://www.acstc.com/img/logo-small.png" width="196" height="42" class="logo pull-left"
+                         alt="Logo"/></a>
+            </div>
+            <div class="pull-right">
+                <a class="btn login-btn" href="https://secure.wirecash.com/card/wirecash/login.jsp">
+                    <span class="glyphicon glyphicon-lock"></span> &nbsp; Login</a>
+            </div>
+        </header>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row main-content">
+        <div class="col-md-9" ng-app="app" ng-controller="IndexCtrl">
+            <service-locations
+                    product-id="4"
+                    currency-id="104"
+                    amount="250"
+                    rcity="Tijuana"
+                    rstate="BJ"
+                    country="MX">
+            </service-locations>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<script type="text/javascript" src="ngLocations.js"></script>
+
+</body>
+</html>
