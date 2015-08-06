@@ -1,23 +1,23 @@
 /* jshint camelcase:false*/
 /* global google */
-(function (window, $) {
+define(function(require) {
     'use strict';
+    var $ = require('jquery'),
+        gmapsLoader = require('gmaps-loader');
 
     /**
      * Creates a google maps object, also decorates ServiceLocation object(s) with various google objects.<br/>
      * For more information on the google maps api v3 refer to their docs page at:<br/>
      * {@link https://developers.google.com/maps/documentation/javascript/tutorial}
      * @param {object} options
-     * @param {jQuery} options.container The jQuery container object
+     * @param {object} options.container The dom html element object
      * @param {object} options.mapsOptions Additional google maps options to be passed through
      * @constructor
      * @memberOf WC
      */
-    var GMaps = function (options) {
-        this.options = $.extend({}, {
-            container: $(),
-            mapsOptions: {}
-        }, options || {});
+    var GMaps = function (loadOptions, mapOptions) {
+        this.loadOptions = loadOptions;
+        this.mapOptions = mapOptions;
 
         this.map = null;
         this.geocoder = null;
@@ -53,17 +53,27 @@
      * @private
      */
     fn._initGmaps = function () {
-        this.geocoder = new google.maps.Geocoder();
+        // Load the gmaps script
+        var self = this;
 
-        var latlng = new google.maps.LatLng(-104.8352628, 37.9452861);
+        self.loadOptions.gmapsLoaded = function(google) {
 
-        var myOptions = {
-            zoom: 5,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            self.geocoder = new google.maps.Geocoder();
+
+            //var latlng = new google.maps.LatLng(-104.8352628, 37.9452861);
+            //console.log('latlng', latlng);
+            var requiredOptions = {
+                zoom: 5,
+                center: { lat: -34.397, lng: 150.644},
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            console.log('self.options.container', self.mapOptions.container);
+
+            self.map = new google.maps.Map(self.mapOptions.container, $.extend(requiredOptions, self.mapOptions));
         };
 
-        this.map = new google.maps.Map(this.options.container[0], $.extend(myOptions, this.options.mapsOptions));
+        gmapsLoader.loadGmaps(self.loadOptions);
     };
 
     /**
@@ -228,12 +238,5 @@
         }
     };
 
-    if (!window.hasOwnProperty('WC')) {
-        window.WC = {};
-    }
-
-    window.WC.GMaps = GMaps;
-
-    $.WCGmaps = GMaps;
-
-})(this, this.jQuery);
+    return GMaps;
+});

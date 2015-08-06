@@ -2,8 +2,8 @@
 define(function(require){
     'use strict';
 
-    var angular = require('angular');
-    var Spinner = require('spinjs');
+    var angular = require('angular'),
+        Spinner = require('spinjs');
 
     angular.module('wcServiceLocations', [])
 
@@ -160,6 +160,7 @@ define(function(require){
                         });
 
                         //handles the click event on the search button
+
                         element.on('click', '#searchContainer .btn', locationSearch);
 
                         //Handles the event when a location is selected

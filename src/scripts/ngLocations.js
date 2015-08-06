@@ -2,8 +2,9 @@
 define(function(require){
   'use strict';
 
-  var angular = require('angular');
-  var Spinner = require('spinjs');
+  var angular = require('angular'),
+      Spinner = require('spinjs'),
+      gmaps = require('gmaps');
 
   angular.module('wcServiceLocations', [])
 
@@ -33,7 +34,11 @@ define(function(require){
       },
 
       link: function(scope, element, attrs) {
-
+        var map = new gmaps({
+          key: 'AIzaSyBloJAXNAVsY4hm8fAAnr4MHwcEGuPQV5A'
+        },{
+          container: element.find(".maps-container")[0]
+        });
       }
     };
   });

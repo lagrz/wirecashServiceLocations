@@ -1,7 +1,8 @@
 /* jshint camelcase:false*/
-(function (window, $, google) {
+define(function (require) {
     'use strict';
 
+    var $ = require('jquery');
     /**
      * Group of method helpers for dynamically loading the google maps api
      * @namespace
@@ -63,7 +64,7 @@
          * @param {object} options
          */
         loadGmaps: function (options) {
-            if (!google && options.key.length !== 0) {
+            if (!window.google && options.key && options.key.length !== 0) {
                 var s = document.createElement('script');
                 var cb = this.buildGlobalCallback(options);
                 try {
@@ -80,12 +81,5 @@
         }
     };
 
-    if (!window.hasOwnProperty('WC')) {
-        window.WC = {};
-    }
-
-    window.WC.GmapsAPILoader = GmapsAPILoader;
-
-    $.WCGmapsAPILoader = GmapsAPILoader;
-
-})(this, this.jQuery, this.google);
+    return GmapsAPILoader;
+});

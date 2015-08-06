@@ -3,7 +3,8 @@ require.config({
 
   paths: {
     'angular': '../lib/bower/angular/angular',
-    'spinjs': '../lib/bower/spinjs/spin'
+    'spinjs': '../lib/bower/spinjs/spin',
+    'jquery': '../lib/bower/jquery/dist/jquery'
   },
 
   shim: {
