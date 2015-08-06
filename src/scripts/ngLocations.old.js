@@ -1,11 +1,11 @@
 //Needs: jQuery, Handlebars, Spinjs, and of course the service locations thing
 define(function(require){
     'use strict';
-    var angular = require('angular');
-    var Spinner = require('spinner');
-    var $ = require('jquery');
 
-    angular.module('WC', [])
+    var angular = require('angular');
+    var Spinner = require('spinjs');
+
+    angular.module('wcServiceLocations', [])
 
         .directive('serviceLocations', function () {
 
@@ -255,4 +255,4 @@ define(function(require){
                 }
             };
         });
-})(this.angular, this.jQuery, this.WC);
+});
