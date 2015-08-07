@@ -1,37 +1,21 @@
-<div class="row location-row" data-id="{{id}}"
-     style="border-bottom: 1px solid #ddd;padding-bottom:10px;{{#if limitLessThanAmount}}color:#a0a0a0{{/if}}">
-    <div class="col-md-12">
-        <h4>{{name}}</h4>
+<div class="row location-row" style="border-bottom: 1px solid #ddd;padding-bottom:10px;">
+  <div class="col-md-12">
+  <h4>{{location.name}}</h4>
     </div>
     <div class="col-md-7">
-        <div>{{address}}</div>
+      <div>{{location.address}}</div>
+      <div ng-show="location.address2">{{location.address2}}</div>
+      {{location.cityState}}
+      <div ng-show="location.phone">Phone: {{location.phone}}</div>
 
-        {{#if address2}}
-            <div>{{address2}}</div>
-        {{/if}}
+      <span ng-show="location.limitLessThanAmount">Maximum send amount of {{location.dollarLimit}}</span>
 
-        {{cityState}}
-
-        {{#if phone}}
-            <div>Phone: {{phone}}</div>
-        {{/if}}
-
-        {{#if limitLessThanAmount}}
-            <span>Maximum send amount of {{dollar limit}}</span>
-        {{else}}
-            <button type="button" class="btn btn-primary btn-sm btn-location" data-id="{{id}}" style="margin-top:15px;">
-                Use this location
-            </button>
-        {{/if}}
+      <button ng-hide="location.limitLessThanAmount" type="button" class="btn btn-primary btn-sm btn-location" style="margin-top:15px;">
+      Use this location
+      </button>
     </div>
     <div class="col-md-5">
-        {{#if distance}}
-            Distance: {{distance}} Miles
-        {{/if}}
-
-        {{#if hours_of_ops}}
-            <br/>
-            Hours: {{hours_of_ops}}
-        {{/if}}
-    </div>
+      <span ng-show="location.distance">Distance: {{location.distance}} Miles</span>
+      <div ng-show="location.hours_of_ops"><br/>Hours: {{location.hours_of_ops}}</div>
+  </div>
 </div>

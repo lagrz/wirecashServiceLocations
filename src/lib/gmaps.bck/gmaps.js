@@ -3,8 +3,9 @@
 define(function(require) {
     'use strict';
     var $ = require('jquery'),
-        gmapsLoader = require('gmaps-loader');
+        gmapsLoader = require(['./gmaps-loader']);
 
+    console.log('gmapsLoader', gmapsLoader);
     /**
      * Creates a google maps object, also decorates ServiceLocation object(s) with various google objects.<br/>
      * For more information on the google maps api v3 refer to their docs page at:<br/>

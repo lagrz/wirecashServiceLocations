@@ -1,6 +1,7 @@
-(function (win, $) {
+define(function (require) {
     'use strict';
 
+    var $ = require('jquery');
     /**
      * Paginator class.
      * @constructor
@@ -212,10 +213,10 @@
         }
 
         if (this.recs.url.length) {
-            console.log('INSIDE PAGINATOR: ',this.recs);
+            //console.log('INSIDE PAGINATOR: ',this.recs);
             this.ajaxCall = $.ajax(this.recs.url, {
                 data: this.recs.params,
-                type: 'POST',
+                type: 'GET',
                 beforeSend: this.recs.onLoadingData,
                 error: this.recs.onAjaxError,
                 complete: function (jqXHR, status) {
@@ -382,13 +383,5 @@
             data: []
         });
     };
-
-    if (!window.hasOwnProperty('WC')) {
-        window.WC = {};
-    }
-
-    window.WC.Pager = Pager;
-
-    $.WCPaginator = Pager;
-
-})(this, this.jQuery);
+    return Pager;
+});

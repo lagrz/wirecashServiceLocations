@@ -1,59 +1,61 @@
 <div class="service-locations">
   <div class="row">
       <div class="col-md-12">
-          <div class="maps-container" style="height: 300px;width: 100%;border: 1px solid #808080"></div>
+          <div class="maps-container" gmap options="mapOptions" style="width:100%; height: 450px;"></div>
       </div>
   </div>
-
-  <div class="row" style="position: relative;">
+  <br />
+  <div class="row" >
       <div class="col-md-12 text-center navsection">
-          <a href="#" role="button" class="btn btn-default btn-xs wc-first-page">
+          <a ng-hide="currentPage === 1" ng-click="firstPage()" href="#" role="button" class="btn btn-default btn-xs wc-first-page">
               <span class="glyphicon glyphicon-fast-backward"></span>
           </a>
-          <a href="#" role="button" class="btn btn-default btn-xs wc-page-back">
+          <a ng-hide="currentPage === 1" ng-click="prevPage()" href="#" role="button" class="btn btn-default btn-xs wc-page-back">
               <span class="glyphicon glyphicon-step-backward"></span>
           </a>
 
-          <span>Showing</span> <span class="locations-range"></span>
+          <span>Showing</span> <span class="locations-range">{{locationsPageRange}}</span>
 
-          <a href="#" role="button" class="btn btn-default btn-xs wc-page-next">
+          <a ng-hide="currenPage === totalPages" ng-click="nextPage()" href="#" role="button" class="btn btn-default btn-xs wc-page-next">
               <span class="glyphicon glyphicon-step-forward"></span>
           </a>
-          <a href="#" role="button" class="btn btn-default btn-xs wc-last-page">
+          <a ng-hide="currenPage === totalPages" ng-click="lastPage()" href="#" role="button" class="btn btn-default btn-xs wc-last-page">
               <span class="glyphicon glyphicon-fast-forward"></span>
           </a>
       </div>
-
-
-      <div id="searchContainer"
-           class="input-group col-md-3 input-group-sm"
-           style="position: absolute; top: 5px; right: 15px;z-index: 999999">
-          <input type="search" class="form-control" placeholder="Search Locations"/>
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" style="background: #6ca7db">Search</button>
-        </span>
-      </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="input-group col-md-3 input-group-sm pull-right">
+        <input type="search" ng-model="searchTerm" class="form-control" placeholder="Search Locations"/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="search()" type="button" >Search</button>
+      </span>
+    </div>
   </div>
 
   <div class="row">
-      <div class="col-md-12 locations-content" style="position: relative"></div>
+      <div ng-repeat="location in locations" class="col-md-12 locations-content" >
+      <service-location location="location"></service-location>
+      </div>
   </div>
+  <br />
 
   <div class="row">
       <div class="col-md-12 text-center navsection">
-          <a href="#" role="button" class="btn btn-default btn-xs wc-first-page">
+          <a ng-hide="currentPage === 1" ng-click="firstPage()" href="#" role="button" class="btn btn-default btn-xs wc-first-page">
               <span class="glyphicon glyphicon-fast-backward"></span>
           </a>
-          <a href="#" role="button" class="btn btn-default btn-xs wc-page-back">
+          <a ng-hide="currentPage === 1" ng-click="prevPage()" href="#" role="button" class="btn btn-default btn-xs wc-page-back">
               <span class="glyphicon glyphicon-step-backward"></span>
           </a>
 
-          <span>Showing</span> <span class="locations-range"></span>
+          <span>Showing</span> <span class="locations-range">{{locationsPageRange}}</span>
 
-          <a href="#" role="button" class="btn btn-default btn-xs wc-page-next">
+          <a ng-hide="currenPage === totalPages" ng-click="nextPage()" href="#" role="button" class="btn btn-default btn-xs wc-page-next">
               <span class="glyphicon glyphicon-step-forward"></span>
           </a>
-          <a href="#" role="button" class="btn btn-default btn-xs wc-last-page">
+          <a ng-hide="currenPage === totalPages" ng-click="lastPage()" href="#" role="button" class="btn btn-default btn-xs wc-last-page">
               <span class="glyphicon glyphicon-fast-forward"></span>
           </a>
       </div>
