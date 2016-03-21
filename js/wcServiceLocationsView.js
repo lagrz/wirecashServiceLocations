@@ -317,10 +317,12 @@
             //create objects
             var locations = $.map(data.data.data, $.proxy(function (obj) {
                 var location = new $.WCServiceLocation(obj);
+                
                 //decorate the location object with gmap
                 this.gmap.setLatLng(location);
                 this.gmap.createMarker(location);
                 this.gmap.createMarkerEvents(location, this._markerMouseEnter, this._markerMouseLeave, this);
+                
                 return location;
             }, this));
 

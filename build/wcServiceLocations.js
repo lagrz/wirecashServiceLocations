@@ -160,7 +160,7 @@
      * @private
      */
     fn._ensureList = function (obj) {
-        if(obj === undefined){
+        if (obj === undefined) {
             return [];
         }
         if (!$.isArray(obj)) {
@@ -207,8 +207,8 @@
         } else if (serviceLocation.get('coordinates').latitude !== 0) {
 
             addressRequest.latlng = new google.maps.LatLng(
-                  serviceLocation.get('coordinates').latitude,
-                  serviceLocation.get('coordinates').longitude
+                serviceLocation.get('coordinates').latitude,
+                serviceLocation.get('coordinates').longitude
             );
         }
         this.geocoder.geocode(addressRequest, function (results, status) {
@@ -238,11 +238,13 @@
         if (serviceLocation.get('coordinates').latitude !== 0) {
 
             var latlnt = new google.maps.LatLng(
-                  serviceLocation.get('coordinates').latitude,
-                  serviceLocation.get('coordinates').longitude
+                serviceLocation.get('coordinates').latitude,
+                serviceLocation.get('coordinates').longitude
             );
 
             serviceLocation.set('gmapLatLng', latlnt);
+        } else {
+            serviceLocation.set('gmapLatLng', undefined);
         }
     };
 
@@ -256,13 +258,14 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var latlng = serviceLocation[i];
+            if (latlng.get('gmapLatLng') !== null && latlng.get('gmapLatLng') !== undefined) {
+                var marker = new google.maps.Marker({//draws the markers
+                    position: latlng.get('gmapLatLng'),
+                    map: null
+                });
 
-            var marker = new google.maps.Marker({//draws the markers
-                position: latlng.get('gmapLatLng'),
-                map: null
-            });
-
-            latlng.set('gmapMarker', marker);
+                latlng.set('gmapMarker', marker);
+            }
         }
     };
 
@@ -279,9 +282,11 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
-            var marker = location.get('gmapMarker');
-            google.maps.event.addListener(marker, 'mouseover', $.proxy(callbackOver, context, location));
-            google.maps.event.addListener(marker, 'mouseout', $.proxy(callbackOut, context, location));
+            if (location.get('gmapMarker') !== null && location.get('gmapMarker') !== undefined) {
+                var marker = location.get('gmapMarker');
+                google.maps.event.addListener(marker, 'mouseover', $.proxy(callbackOver, context, location));
+                google.maps.event.addListener(marker, 'mouseout', $.proxy(callbackOut, context, location));
+            }
         }
     };
 
@@ -298,7 +303,7 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
-            if (location) {
+            if (location && location.get('gmapMarker') !== null && location.get('gmapMarker') !== undefined) {
                 location.get('gmapMarker').setMap(map);
             }
         }
@@ -334,7 +339,9 @@
 
         for (var i = 0, s = serviceLocation.length; i < s; i++) {
             var location = serviceLocation[i];
-            latlngbounds.extend(location.get('gmapLatLng'));
+            if(location.get('gmapLatLng') !== null && location.get('gmapLatLng') !== undefined){
+                latlngbounds.extend(location.get('gmapLatLng'));
+            }
         }
 
         this.map.setCenter(latlngbounds.getCenter());
@@ -1194,10 +1201,12 @@
             //create objects
             var locations = $.map(data.data.data, $.proxy(function (obj) {
                 var location = new $.WCServiceLocation(obj);
+                
                 //decorate the location object with gmap
                 this.gmap.setLatLng(location);
                 this.gmap.createMarker(location);
                 this.gmap.createMarkerEvents(location, this._markerMouseEnter, this._markerMouseLeave, this);
+                
                 return location;
             }, this));
 
